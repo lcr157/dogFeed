@@ -22,7 +22,7 @@
 $(function() {
 	$("input").not($(":button")).keypress(function(evt) {
 		// 엔터키의 키코드값 : 13
-		// 엔터를 눌렀다면
+		// 엔터를 누르면 아이디, 비밀번호, 로그인 순으로 실행
 		if(evt.keyCode === 13) {
 			const fields = $(this).parents('form').find('button,input');
 			console.log(fields);
@@ -79,7 +79,6 @@ function sendLogin() {
 			<p> 비밀번호<input type="password" name="user_Pwd" maxlength="8"></p>
 			<p>
 				<button type="button" onclick="sendLogin();">로그인</button>
-				<button>회원가입</button>
 			</p>
 		</form>
 	</main>
