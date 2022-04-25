@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.util.MyServlet;
 
+// 메인화면
 @WebServlet("/main/*")
 public class MainServlet extends MyServlet {
 	private static final long serialVersionUID = 1L;
