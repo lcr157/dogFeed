@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>로그인</title>
 <link rel="icon" href="data:;base64,iVBORw0KGgo=">
 <!-- Favicon-->
 <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
@@ -16,6 +16,17 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
 <!-- Core theme CSS (includes Bootstrap)-->
 <link href="${pageContext.request.contextPath}/resource/css/styles.css" rel="stylesheet" type="text/css"/>
+
+<style type="text/css">
+main {
+	text-align: center;	
+}
+
+h3 {
+	margin: 10px 0;
+}
+
+</style>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
@@ -85,7 +96,7 @@ function sendLogin() {
 	
 	<table class="table">
 		<tr>
-			<td class="msg-box">${message}</td>
+			<td style="border-bottom-width: 0;" class="msg-box">${message}</td>
 		</tr>
 	</table>
 	

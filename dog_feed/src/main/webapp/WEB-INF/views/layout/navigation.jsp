@@ -29,6 +29,7 @@
                     </ul>
                 </li>
                 
+                <c:if test="${sessionScope.member.userRoll == 0}">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">마이페이지</a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -36,6 +37,7 @@
                         <li><a class="dropdown-item" href="#!">배송현황</a></li>
                     </ul>
                 </li>
+                </c:if>
                 
                 <c:if test="${sessionScope.member.userRoll == 1}">
                 <li class="nav-item dropdown">
@@ -63,35 +65,34 @@
 	                	<li class="nav-item dropdown">
 	                		<a class="nav-link" href="${pageContext.request.contextPath}/member/login.do">로그인</a>
 	                	</li>
+	                	
 	                	<li class="nav-item dropdown">
 	                		<a class="nav-link" href="${pageContext.request.contextPath}/member/member.do">회원가입</a>
 	                	</li>
 	            	</c:if>
 	            	
+	            	
 		            <c:if test="${not empty sessionScope.member}">
 		                <li class="nav-item dropdown" style="color:blue; padding: 8px 0;">
-						${sessionScope.member.userName}
+							${sessionScope.member.userName}
 						</li>
-						<li class="nav-item dropdown" style="padding: 8px;">
-						님&nbsp;|&nbsp;
+							<li class="nav-item dropdown" style="padding: 8px;">
+							님&nbsp;|&nbsp;
 						</li>
 		                
 		                <li class="nav-item dropdown">
-						<a class="nav-link" href="${pageContext.request.contextPath}/member/logout.do">로그아웃</a>
+							<a class="nav-link" href="${pageContext.request.contextPath}/member/logout.do">로그아웃</a>
 						</li>
 						
-						<li class="nav-item dropdown">
-						<a class="nav-link" href="${pageContext.request.contextPath}/member/pwd.do?mode=update">정보수정</a>
-						</li>
 						
-						<li class="nav-item dropdown">
-						<a class="nav-link" href="${pageContext.request.contextPath}/member/delete_ok.do?mode=delete">회원탈퇴</a>
-						</li>
-						
+						<c:if test="${sessionScope.member.userRoll == 0}">
+							<li class="nav-item dropdown">
+								<a class="nav-link" href="${pageContext.request.contextPath}/member/pwd.do?mode=update">정보수정</a>
+							</li>
+							
+						</c:if>
 					</c:if>
-					
 				</ul>
 			</div>
-		
-        </div>
+      </div>
 </nav>

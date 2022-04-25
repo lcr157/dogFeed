@@ -58,6 +58,7 @@ public class MemberDAO {
 		return dto;
 	}
 	
+	
 	public void insertMember(MemberDTO dto) throws SQLException {
 		PreparedStatement pstmt = null;
 		String sql;
@@ -107,6 +108,7 @@ public class MemberDAO {
 
 	}
 
+	
 	public MemberDTO readMember(String user_Id) {
 		MemberDTO dto = null;
 		PreparedStatement pstmt = null;
@@ -134,7 +136,7 @@ public class MemberDAO {
 				dto.setUser_Pwd(rs.getString("user_Pwd"));
 				dto.setUser_Name(rs.getString("user_Name"));
 				dto.setUser_Birth(rs.getString("user_Birth"));
-				dto.setTel(rs.getString("tel"));
+				dto.setTel(rs.getString("user_Tel"));
 				if (dto.getTel() != null) {
 					String[] ss = dto.getTel().split("-");
 					if (ss.length == 3) {
@@ -143,7 +145,7 @@ public class MemberDAO {
 						dto.setTel3(ss[2]);
 					}
 				}
-				dto.setUser_Email1(rs.getString("user_Email1"));
+				dto.setUser_Email1(rs.getString("user_Email"));
 				if (dto.getUser_Email1() != null) {
 					String[] ss = dto.getUser_Email1().split("@");
 					if (ss.length == 2) {
@@ -176,6 +178,7 @@ public class MemberDAO {
 		return dto;
 	}
 
+	
 	public void updateMember(MemberDTO dto) throws SQLException {
 		PreparedStatement pstmt = null;
 		String sql;
@@ -243,5 +246,4 @@ public class MemberDAO {
 
 	}
 
-	
 }

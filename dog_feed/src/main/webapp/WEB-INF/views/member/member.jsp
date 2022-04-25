@@ -7,8 +7,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>spring</title>
 
+<title>${title}</title>
 
 <style type="text/css">
 .table-form td {
@@ -167,20 +167,17 @@ function changeEmail() {
         f.user_Email3.readOnly = true;
         f.user_Email2.focus(); 
     }
+    
     else {
         f.user_Email3.value = "";
         f.user_Email3.readOnly = false;
         f.user_Email2.focus();
     }
 }
-</script>
-</head>
+</script> </head>
+
 <body>
 
-<header>
-    <jsp:include page="/WEB-INF/views/layout/header.jsp"></jsp:include>
-</header>
-	
 <main>
     <div class="body-container">
         <div class="body-title">
@@ -338,11 +335,15 @@ function changeEmail() {
 			</c:if>
 					
 			<tr>
-				<td align="center">
+				<td style="width:50%;" align="center">
 				    <button type="button" class="btn" name="btnOk" onclick="memberOk();"> ${mode=="member"?"회원가입":"정보수정"} </button>
 				    <button type="reset" class="btn"> 다시입력 </button>
 				    <button type="button" class="btn" 
 				    	onclick="javascript:location.href='${pageContext.request.contextPath}/';"> ${mode=="member"?"가입취소":"수정취소"} </button>
+				</td>
+				
+				<td style="width:50%; text-align: right;">
+					<button type="button" class="btn" onclick="location.href='${pageContext.request.contextPath}/member/delete_ok.do?mode=delete';">회원탈퇴</button>
 				</td>
 			</tr>
 			
@@ -383,10 +384,12 @@ function changeEmail() {
                     if(data.bname !== ''){
                         extraAddr += data.bname;
                     }
+                    
                     // 건물명이 있을 경우 추가한다.
                     if(data.buildingName !== ''){
                         extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
                     }
+                    
                     // 조합형주소의 유무에 따라 양쪽에 괄호를 추가하여 최종 주소를 만든다.
                     fullAddr += (extraAddr !== '' ? ' ('+ extraAddr +')' : '');
                 }
@@ -422,10 +425,4 @@ function changeEmail() {
 
 </script>
 
-<footer>
-    <jsp:include page="/WEB-INF/views/layout/footer.jsp"></jsp:include>
-</footer>
-
-
-</body>
-</html>
+</body> </html>

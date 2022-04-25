@@ -16,7 +16,7 @@
 <!-- Core theme CSS (includes Bootstrap)-->
 <link href="${pageContext.request.contextPath}/resource/css/styles.css" rel="stylesheet" type="text/css"/>
 <!-- admin css가져오기 -->
-<link href="${pageContext.request.contextPath}/semi_project/css/admin.css" rel="stylesheet" type="text/css"/>
+<link href="${pageContext.request.contextPath}/resource/css/admin.css" rel="stylesheet" type="text/css"/>
 
 <style type="text/css">
 h3 {

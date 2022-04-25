@@ -105,16 +105,19 @@ public class MemberServlet extends MyServlet {
 		// 루트로 리다이렉트
 		resp.sendRedirect(cp + "/");
 	}
+	
+	
+	// 회원가입 폼
 	private void memberForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// 회원가입 폼
 		req.setAttribute("title", "회원 가입");
 		req.setAttribute("mode", "member");
 
 		forward(req, resp, "/WEB-INF/views/member/member.jsp");
 	}
 
+	
+	// 회원가입 처리
 	private void memberSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// 회원가입 처리
 		MemberDAO dao = new MemberDAO();
 
 		String cp = req.getContextPath();
@@ -169,8 +172,9 @@ public class MemberServlet extends MyServlet {
 		forward(req, resp, "/WEB-INF/views/member/member.jsp");
 	}
 
+	
+	// 패스워드 확인 폼
 	private void pwdForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// 패스워드 확인 폼
 		HttpSession session = req.getSession();
 		SessionInfo info = (SessionInfo) session.getAttribute("member");
 
@@ -192,8 +196,9 @@ public class MemberServlet extends MyServlet {
 		forward(req, resp, "/WEB-INF/views/member/pwd.jsp");
 	}
 
+	
+	// 패스워드 확인
 	private void pwdSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// 패스워드 확인
 		MemberDAO dao = new MemberDAO();
 		HttpSession session = req.getSession();
 
@@ -233,9 +238,9 @@ public class MemberServlet extends MyServlet {
 				forward(req, resp, "/WEB-INF/views/member/pwd.jsp");
 				return;
 			}
-
+			
+			// 회원탈퇴
 			if (mode.equals("delete")) {
-				// 회원탈퇴
 				dao.deleteMember(info.getUserId());
 
 				session.removeAttribute("member");
@@ -259,8 +264,9 @@ public class MemberServlet extends MyServlet {
 		resp.sendRedirect(cp + "/");
 	}
 
+	
+	// 회원정보 수정 완료
 	private void updateSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// 회원정보 수정 완료
 		MemberDAO dao = new MemberDAO();
 		HttpSession session = req.getSession();
 
@@ -272,7 +278,9 @@ public class MemberServlet extends MyServlet {
 
 		try {
 			SessionInfo info = (SessionInfo) session.getAttribute("member");
-			if (info == null) { // 로그아웃 된 경우
+
+			// 로그아웃 된 경우
+			if (info == null) {
 				resp.sendRedirect(cp + "/member/login.do");
 				return;
 			}
@@ -306,6 +314,8 @@ public class MemberServlet extends MyServlet {
 		resp.sendRedirect(cp + "/");
 	}
 
+	
+	// 회원탈퇴
 	private void deleteSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		MemberDAO dao = new MemberDAO();
 		HttpSession session = req.getSession();
@@ -316,8 +326,8 @@ public class MemberServlet extends MyServlet {
 			
 			String mode = req.getParameter("mode");
 			
+			// 회원탈퇴
 			if (mode.equals("delete")) {
-				// 회원탈퇴
 				dao.deleteMember(info.getUserId());
 
 				session.removeAttribute("member");
@@ -330,4 +340,6 @@ public class MemberServlet extends MyServlet {
 		resp.sendRedirect(cp + "/");
 		return;
 	}
+	
+	
 }

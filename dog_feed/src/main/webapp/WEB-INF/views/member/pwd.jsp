@@ -7,8 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>spring</title>
-
+<title>정보수정</title>
 
 <style type="text/css">
 main .container {
@@ -79,10 +78,6 @@ function sendOk() {
 </head>
 <body>
 
-<header>
-    <jsp:include page="/WEB-INF/views/layout/header.jsp"></jsp:include>
-</header>
-	
 <main>
 	<div class="container">
 		<div class="title-body">
@@ -130,8 +125,5 @@ function sendOk() {
 	</div>
 </main>
 
-<footer>
-	<jsp:include page="/WEB-INF/views/layout/footer.jsp"></jsp:include>
-</footer>
 </body>
 </html>

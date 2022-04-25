@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>강아지 사료 판매사이트에 오신걸 환영합니다.</title>
 <link rel="icon" href="data:;base64,iVBORw0KGgo=">
 <!-- Favicon-->
 <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
