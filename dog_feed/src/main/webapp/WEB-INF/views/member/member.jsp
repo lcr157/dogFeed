@@ -296,6 +296,17 @@ function changeEmail() {
         f.user_Email2.focus();
     }
 }
+
+function next(){
+	 if(confirm("탈퇴하시려면 예를 누르시고 하지 않으시려면 아니오를 눌러주세요"))
+	 {
+	  location.href="${pageContext.request.contextPath}/member/delete_ok.do?mode=delete";
+	 }
+	 else
+	 {
+	 alert('아니오를 누르셨습니다');
+	 }
+	}
 </script> </head>
 
 <body>
@@ -466,7 +477,7 @@ function changeEmail() {
 				
 				<c:if test="${mode != 'member'}">
 				<td style="width:50%; text-align: right;">
-					<button type="button" class="btn" onclick="location.href='${pageContext.request.contextPath}/member/delete_ok.do?mode=delete';">회원탈퇴</button>
+					<button type="button" class="btn" onclick="next()">회원탈퇴</button>
 				</td>
 				</c:if>
 			</tr>
