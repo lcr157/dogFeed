@@ -24,8 +24,9 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">커뮤니티</a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#!">공지사항</a></li>
-                        <li><a class="dropdown-item" href="#!">Q&amp;A</a></li>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/notice/list.do">공지사항</a></li>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/faq/list.do">자주 묻는 질문</a></li>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/qna/list.do">Q&amp;A</a></li>
                     </ul>
                 </li>
                 
