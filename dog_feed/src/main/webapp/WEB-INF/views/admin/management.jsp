@@ -49,7 +49,8 @@ function searchList() {
 		<table class="table">
 			<tr>
 				<th>상품번호</th>
-				<th>상품카테고리코드</th>
+				<th>상품카테고리</th>
+				<th>상품카테고리 종류</th>
 				<th>상품명</th>
 				<th>상품가격</th>
 				<th>상품등록일</th>
@@ -59,7 +60,8 @@ function searchList() {
 			
 			<tr>
 				<td>1</td>
-				<td>1</td>
+				<td>사료</td>
+				<td>소프트</td>
 				<td><a href="${pageContext.request.contextPath}/admin/article.do">사료</a></td>
 				<td>30,000원</td>
 				<td>2022-04-20</td>

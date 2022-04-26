@@ -10,7 +10,7 @@ import com.util.DBConn;
 public class MemberDAO {
 	private Connection conn = DBConn.getConnection();
 	
-	// 로그인
+	// 로그인 함수
 	public MemberDTO loginMember(String user_Id, String user_Pwd) {
 		MemberDTO dto = null;
 		PreparedStatement pstmt = null;
@@ -59,6 +59,7 @@ public class MemberDAO {
 	}
 	
 	
+	// 회원가입 함수
 	public void insertMember(MemberDTO dto) throws SQLException {
 		PreparedStatement pstmt = null;
 		String sql;
@@ -66,7 +67,8 @@ public class MemberDAO {
 		try {
 			conn.setAutoCommit(false);
 
-			sql = "INSERT INTO member(user_Id, user_Pwd, user_Name, user_Birth, user_Email, user_Tel, user_Address1, user_Address2) VALUES (?, ?, ?, TO_DATE(?,'YYYYMMDD'), ?, ?, ?, ?)";
+			sql = "INSERT INTO member(user_Id, user_Pwd, user_Name, user_Birth, user_Email, user_Tel, "
+					+ " user_Address1, user_Address2) VALUES (?, ?, ?, TO_DATE(?,'YYYYMMDD'), ?, ?, ?, ?)";
 			pstmt = conn.prepareStatement(sql);
 
 			pstmt.setString(1, dto.getUser_Id());
@@ -109,6 +111,7 @@ public class MemberDAO {
 	}
 
 	
+	// 회원정보 가져오기 함수
 	public MemberDTO readMember(String user_Id) {
 		MemberDTO dto = null;
 		PreparedStatement pstmt = null;
@@ -179,6 +182,7 @@ public class MemberDAO {
 	}
 
 	
+	// 회원수정 함수
 	public void updateMember(MemberDTO dto) throws SQLException {
 		PreparedStatement pstmt = null;
 		String sql;
@@ -195,7 +199,8 @@ public class MemberDAO {
 			pstmt.close();
 			pstmt = null;
 
-			sql = "UPDATE member SET user_Birth=TO_DATE(?,'YYYYMMDD'), user_Email=?, user_Tel=?, user_Address1=?, user_Address2=? WHERE user_Id=?";
+			sql = "UPDATE member SET user_Birth=TO_DATE(?,'YYYYMMDD'), "
+					+ " user_Email=?, user_Tel=?, user_Address1=?, user_Address2=? WHERE user_Id=?";
 			pstmt = conn.prepareStatement(sql);
 
 			pstmt.setString(1, dto.getUser_Birth());
@@ -221,6 +226,8 @@ public class MemberDAO {
 
 	}
 
+	
+	// 회원탈퇴 함수
 	public void deleteMember(String user_Id) throws SQLException {
 		PreparedStatement pstmt = null;
 		String sql;
@@ -246,4 +253,5 @@ public class MemberDAO {
 
 	}
 
+	
 }

@@ -73,12 +73,40 @@ function sendBoard() {
 		return;
 	}	
 	
-	// f.action="${pageContext.request.contextPath}/admin/${mode}_ok.do";
-	f.action="${pageContext.request.contextPath}/admin/management.do";
+	f.action="${pageContext.request.contextPath}/product/${mode}_ok.do";
+	// f.action="${pageContext.request.contextPath}/admin/management.do";
 	f.submit();
 }
 
+function change(e) {
+	let feed = ["soft", "hard"];
+	let feed_name = ["소프트", "하드"];
+	let snack = ["dry", "gum"];
+	let snack_name = ["건식", "껌"];
+	let target = document.getElementsByName("categoryDetail_kind")[0];
+	
+	if(e.value == "feed"){
+		var d = feed;
+		var dd = feed_name;
+	}
+	else if(e.value == "snack") {
+		var d = snack;
+		var dd = snack_name;
+	}
+	
+	target.options.length = 0;
+	
+	for (x in d) {
+		let opt = document.createElement("option");
+		opt.value = d[x];
+		opt.innerHTML = dd[x];
+		target.appendChild(opt);
+	}
+	
+}
+
 </script>
+
 
 
 </head>
@@ -114,9 +142,19 @@ function sendBoard() {
 				<tr>
 					<td>카테고리</td>
 					<td>
-						<select name="category">
-							<option value="feed" ${category =="feed" ? "selected='selected'" : "" }>사료</option>
-							<option value="snack" ${category =="snack" ? "selected='selected'" : "" }>간식</option>
+						<select name="categoryDetail_Name" onchange="change(this);">
+							<option selected="selected">--선택--</option>
+							<option value="feed">사료</option>
+							<option value="snack">간식</option>
+						</select>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>카테고리 종류</td>
+					<td>
+						<select name="categoryDetail_kind">
+							<option>--선택--</option>
 						</select>
 					</td>
 				</tr>

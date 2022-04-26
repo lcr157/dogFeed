@@ -10,7 +10,9 @@
 
 <title>${title}</title>
 
-<style type="text/css">
+<style>
+.visual{ height:1000px; border:1px solid red; }
+
 .table-form td {
 	padding: 7px 0;
 }
@@ -38,46 +40,166 @@
 	text-align: center; color: blue;
 }
 
-.modal_wrap{
-        display: none;
-        width: 500px;
-        height: 500px;
-        position: absolute;
-        top:50%;
-        left: 50%;
-        margin: -250px 0 0 -250px;
-        background:#eee;
-        z-index: 2;
-    }
-    .black_bg{
-        display: none;
-        position: absolute;
-        content: "";
-        width: 100%;
-        height: 100%;
-        background-color:rgba(0, 0,0, 0.5);
-        top:0;
-        left: 0;
-        z-index: 1;
-    }
-    .modal_close{
-        width: 26px;
-        height: 26px;
-        position: absolute;
-        top: -30px;
-        right: 0;
-    }
-
-    .modal_close> a{
-        display: block;
-        width: 100%;
-        height: 100%;
-        background:url(https://img.icons8.com/metro/26/000000/close-window.png);
-        text-indent: -9999px;
-    }
 
 
+      div.container{
+    }
+ 
+      div.insert{
+    }
+ 
+    div.create{
+    width: 800px;
+    text-align: center;
+    padding: 30px;
+    border-bottom: 1px solid black;
+    margin: auto;
+    }
+ 
+    table{
+    height: 300px;
+    width: 900px;
+    border-top: 3px solid black;
+    margin-right: auto;
+    margin-left: auto;
+    }
+ 
+    td{
+    border-bottom: 1px dotted black;
+    }
+ 
+    caption{
+    text-align: left;
+    }
+ 
+    .col1 {
+    background-color: #e8e8e8;
+    padding: 10px;
+    text-align: right;
+    font-weight: bold;
+    font-size: 0.8em;
+    }
+ 
+    .col2 {
+    text-align: left;
+    padding: 5px;
+    }
+ 
+    .but1 {
+    height: 25px;
+    width: 80px;
+    color: white;
+    background-color: black;
+    border-color: black;
+    }
+ 
+    .but2 {
+    height: 27px;
+    width: 120px;
+    color: white;
+    background-color: black;
+    border-color: black;
+    }
+ 
+    .but3 {
+    height: 35px;
+    width: 150px;
+    background-color: white;
+    border: 2px solid black;
+    }
+ 
+    .but4{
+    height: 35px;
+    width: 150px;
+    background-color: white;
+    border: 2px solid black;
+    }
+    
+    .but1:hover {
+    background-color: #b9b9b9;
+    color: black;
+    border: 2px solid black;
+    }
+ 
+    .but2:hover {
+    background-color: #b9b9b9;
+    color: black;
+    border: 2px solid black;
+    }
+ 
+    .but3:hover {
+    background-color: black;
+    color: white;
+    border: 2px solid black;
+    }
+ 
+    .but4:hover {
+    background-color: black;
+    color: white;
+    border: 2px solid black;
+    }
+    
+    p{
+    font-size: 0.7em;
+    }
+ 
+    .g{
+    font-size: 0.7em;
+    }
+ 
+    .c{
+    font-size: 0.7em;
+    }
+ 
+    .a{
+    font-size: 0.7em;
+    }
+    
+    .num{
+    color: red;
+    }
+.help-block, .block {
+	margin-top: 5px;
+}
+.modal_wrap {
+	display: none;
+	width: 500px;
+	height: 500px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: -250px 0 0 -250px;
+	background: #eee;
+	z-index: 2;
+}
 
+.black_bg {
+	display: none;
+	position: absolute;
+	content: "";
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	top: 0;
+	left: 0;
+	z-index: 1;
+}
+
+.modal_close {
+	width: 26px;
+	height: 26px;
+	position: absolute;
+	top: -30px;
+	right: 0;
+}
+
+.modal_close>a {
+	display: block;
+	width: 100%;
+	height: 100%;
+	background: url(https://img.icons8.com/metro/26/000000/close-window.png);
+	text-indent: -9999px;
+}
 </style>
 
 <script type="text/javascript">
@@ -342,9 +464,11 @@ function changeEmail() {
 				    	onclick="javascript:location.href='${pageContext.request.contextPath}/';"> ${mode=="member"?"가입취소":"수정취소"} </button>
 				</td>
 				
+				<c:if test="${mode != 'member'}">
 				<td style="width:50%; text-align: right;">
 					<button type="button" class="btn" onclick="location.href='${pageContext.request.contextPath}/member/delete_ok.do?mode=delete';">회원탈퇴</button>
 				</td>
+				</c:if>
 			</tr>
 			
 			<tr>
