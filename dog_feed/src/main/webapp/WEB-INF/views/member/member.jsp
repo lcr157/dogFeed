@@ -482,6 +482,7 @@ function next(){
 				</c:if>
 			</tr>
 			
+			
 			<tr>
 				<td align="center">
 					<span class="msg-box">${message}</span>
