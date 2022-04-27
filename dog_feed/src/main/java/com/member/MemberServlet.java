@@ -1,6 +1,7 @@
 package com.member;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 
 import javax.servlet.ServletException;
@@ -8,6 +9,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.json.JSONObject;
+
 import com.util.MyServlet;
 
 @WebServlet("/member/*")
@@ -38,6 +42,8 @@ public class MemberServlet extends MyServlet {
 			updateSubmit(req, resp);
 		} else if (uri.indexOf("delete_ok.do") != -1) {
 			deleteSubmit(req, resp);
+		} else if (uri.indexOf("userIdCheck.do") != -1) {
+			userIdCheck(req, resp);
 		}
 	}
 	
@@ -339,6 +345,26 @@ public class MemberServlet extends MyServlet {
 		
 		resp.sendRedirect(cp + "/");
 		return;
+	}
+	
+	private void userIdCheck(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// 아이디 중복검사 (AJAX : JSON)
+		MemberDAO dao = new MemberDAO();
+		
+		String userId = req.getParameter("user_Id");
+		MemberDTO dto = dao.readMember(userId);
+		
+		String passed = "false";
+		if(dto == null) {
+			passed = "true";
+		}
+		
+		JSONObject job = new JSONObject();
+		job.put("passed", passed);
+		
+		resp.setContentType("text/html;charset=utf-8");
+		PrintWriter out = resp.getWriter();
+		out.print(job.toString());
 	}
 	
 	
