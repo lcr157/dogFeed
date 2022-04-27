@@ -298,15 +298,13 @@ function changeEmail() {
 }
 
 function next(){
-	 if(confirm("탈퇴하시려면 예를 누르시고 하지 않으시려면 아니오를 눌러주세요"))
-	 {
-	  location.href="${pageContext.request.contextPath}/member/delete_ok.do?mode=delete";
-	 }
-	 else
-	 {
-	 alert('아니오를 누르셨습니다');
-	 }
+	if(confirm("정말 탈퇴하시겠습니까??")) {
+		location.href="${pageContext.request.contextPath}/member/delete_ok.do?mode=delete";
+	} else {
+		alert('아니오를 누르셨습니다');
 	}
+}
+
 </script> </head>
 
 <body>

@@ -57,27 +57,56 @@ function searchList() {
 				<th>상품조회수</th>
 				<th>상품공개여부</th>
 			</tr>
-			
-			<tr>
-				<td>1</td>
-				<td>사료</td>
-				<td>소프트</td>
-				<td><a href="${pageContext.request.contextPath}/admin/article.do">사료</a></td>
-				<td>30,000원</td>
-				<td>2022-04-20</td>
-				<td>0</td>
-				<td>공개</td>
-			</tr>
 				
-			<!-- 게시물 자리 -->
+			<!-- 상품 자리 -->
 			<c:forEach var="dto" items="${list}">
 				<tr>
 					<td>${dto.listNum}</td>
-					<td>${dto.categoryDetail_Num}</td>
-					<td>${dto.product_Name}</td>
-					<td>${dto.product_Price}</td>
-					<td>${dto.product_Date}</td>
+					<td>
+						<c:if test="${dto.categoryDetail_Name eq 'feed'}">
+								사료
+						</c:if>
+						
+						<c:if test="${dto.categoryDetail_Name eq 'snack'}">
+								간식
+						</c:if>
+					</td>
+					<td>
+						<c:if test="${dto.categoryDetail_Name eq 'feed'}">
+							<c:if test="${dto.categoryDetail_Kind eq 'hard'}">
+									하드
+							</c:if>
+							
+							<c:if test="${dto.categoryDetail_Kind eq 'soft'}">
+									소프트
+							</c:if>
+						</c:if>
+						
+						<c:if test="${dto.categoryDetail_Name eq 'snack'}">
+							<c:if test="${dto.categoryDetail_Kind eq 'dry'}">
+									건식
+							</c:if>
+							
+							<c:if test="${dto.categoryDetail_Kind eq 'gum'}">
+									껌
+							</c:if>
+						</c:if>
+					</td>
+					<td>
+						<a href="${articleUrl}&num=${dto.product_Num}">${dto.product_Name}</a>
+					</td>
+					<td>${dto.product_Price}원</td>
+					<td>${dto.product_Date.substring(0, 10)}</td>
 					<td>${dto.product_Hits}</td>
+					<td>
+						<c:if test="${dto.product_Privacy eq '1'}">
+							공개
+						</c:if>
+						
+						<c:if test="${dto.product_Privacy eq '0'}">
+							비공개
+						</c:if>
+					</td>
 					<td>
 					<c:if test="${dto.product_Privacy} == 1">
 						공개
@@ -103,10 +132,11 @@ function searchList() {
 				<td>
 					<form name="searchForm" action="${pageContext.request.contextPath}/admin/management.do">
 						<select name="condition">
-							<option value="p_Name">상품명</option>
-							<option value="p_Num">상품번호</option>
-							<option value="p_Category">상품카테고리코드</option>
-							<option value="p_Date">상품등록일</option>
+							<option value="all">상품명+내용</option>
+							<option value="product_Num">상품번호</option>
+							<option value="categoryDetail_Name">상품카테고리</option>
+							<option value="categoryDetail_Kind">상품카테고리 종류</option>
+							<option value="product_Date">상품등록일</option>
 						</select>
 						<input type="text" name="keyword">
 						<button class="btn" type="button" onclick="searchList();">검색</button>
