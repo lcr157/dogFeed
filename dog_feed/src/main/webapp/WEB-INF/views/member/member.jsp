@@ -202,6 +202,9 @@
 }
 </style>
 
+<script src="http://code.jquery.com/jquery-latest.js"></script> 
+<script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
+
 <script type="text/javascript">
 function memberOk() {
 	const f = document.memberForm;
@@ -298,14 +301,57 @@ function changeEmail() {
 }
 
 function next(){
-	if(confirm("정말 탈퇴하시겠습니까??")) {
-		location.href="${pageContext.request.contextPath}/member/delete_ok.do?mode=delete";
-	} else {
-		alert('아니오를 누르셨습니다');
+	 if(confirm("탈퇴하시려면 예를 누르시고 하지 않으시려면 아니오를 눌러주세요"))
+	 {
+	  location.href="${pageContext.request.contextPath}/member/delete_ok.do?mode=delete";
+	 }
+	 else
+	 {
+	 alert('아니오를 누르셨습니다');
+	 }
 	}
+	
+function userIdCheck() {
+	// 아이디 중복 검사 : AJAX
+	let userId = $("#user_Id").val();
+	
+	if(! /^[a-z][a-z0-9_]{4,9}$/i.test(userId)) {
+		let s = "아이디는 5~10자 이내이며 첫글자는 영문자로 시작합니다.";
+		$("#user_Id").focus();
+		$("#user_Id").parent().next(".help-block").html(s);
+		return;
+	}
+	
+	let url = "${pageContext.request.contextPath}/member/userIdCheck.do";
+	let query = "user_Id=" + userId;
+	
+	$.ajax({
+		type:"post",
+		url:url,
+		data:query,
+		dataType:"json",
+		success:function(data) {
+			let passed = data.passed;
+			
+			if(passed === "true") {
+				let s = "<span style='color:blue;font-weight:600;'>"+userId+"</span> 아이디는 사용가능합니다.";
+				$("#user_Id").parent().next(".help-block").html(s);
+				$("#user_IdValid").val("true");
+			} else {
+				let s = "<span style='color:red;font-weight:600;'>"+userId+"</span> 아이디는 사용 할 수 없습니다.";
+				$("#user_Id").parent().next(".help-block").html(s);
+				$("#user_IdValid").val("false");
+				$("#user_Id").focus();
+			}
+			
+		},
+		error:function(e) {
+			console.log(e.responseText);
+		}
+	});
 }
-
-</script> </head>
+</script> 
+</head>
 
 <body>
 
@@ -322,6 +368,9 @@ function next(){
 				<td>
 					<p>
 						<input type="text" name="user_Id" id="user_Id" maxlength="10" class="form-control" value="${dto.user_Id}" style="width: 50%;" ${mode=="update" ? "readonly='readonly' ":""}>
+						<c:if test="${mode=='member'}">
+							<button type="button" class="btn" onclick="userIdCheck();">아이디 중복검사</button>
+						</c:if>				
 					</p>
 					<c:if test="${mode=='member'}">
 						<p class="help-block">아이디는 5~10자 이내이며, 첫글자는 영문자로 시작해야 합니다.</p>
