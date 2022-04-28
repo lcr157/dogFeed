@@ -148,6 +148,10 @@ h2 {
 	font-size: 1.2em;
 	letter-spacing: 2px;
 }
+
+.msg-box {
+	text-align: center; color: blue;
+}
 </style>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -212,6 +216,11 @@ h2 {
 			<div class="submit">
 				<input type="submit" value="submit" onclick="sendLogin();">
 			</div>
+			<table class="table">
+				<tr>
+					<td class="msg-box">${message}</td>
+				</tr>
+			</table>
 		</div>
 	</div>
 </form>
