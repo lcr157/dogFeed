@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>상품등록</title>
 <link rel="icon" href="data:;base64,iVBORw0KGgo=">
 <!-- Favicon-->
 <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
@@ -54,14 +54,14 @@ function sendBoard() {
 	
 	str = f.product_Name.value.trim();
 	if(!str){
-		alert("상품명 입력하세요");
+		alert("상품명을 입력하세요");
 		f.product_Name.focus();
 		return;
 	}
 	
 	str = f.product_Price.value.trim();
 	if(!str){
-		alert("상품가격 입력하세요");
+		alert("상품가격을 입력하세요");
 		f.product_Price.focus();
 		return;
 	}
@@ -73,36 +73,8 @@ function sendBoard() {
 		return;
 	}	
 	
-	f.action="${pageContext.request.contextPath}/product/${mode}_ok.do";
-	// f.action="${pageContext.request.contextPath}/admin/management.do";
+	f.action="${pageContext.request.contextPath}/admin/${mode}_ok.do";
 	f.submit();
-}
-
-function change(e) {
-	let feed = ["soft", "hard"];
-	let feed_name = ["소프트", "하드"];
-	let snack = ["dry", "gum"];
-	let snack_name = ["건식", "껌"];
-	let target = document.getElementsByName("categoryDetail_kind")[0];
-	
-	if(e.value == "feed"){
-		var d = feed;
-		var dd = feed_name;
-	}
-	else if(e.value == "snack") {
-		var d = snack;
-		var dd = snack_name;
-	}
-	
-	target.options.length = 0;
-	
-	for (x in d) {
-		let opt = document.createElement("option");
-		opt.value = d[x];
-		opt.innerHTML = dd[x];
-		target.appendChild(opt);
-	}
-	
 }
 
 </script>
@@ -125,7 +97,7 @@ function change(e) {
 		<h3>상품등록</h3>
 		<p></p>
 		
-		<form name="boardForm" method="post" enctype="multipart/form-data">
+		<form name="boardForm" method="post">
 			<table class="table">
 				<tr>
 					<td>상품명</td>
@@ -142,10 +114,9 @@ function change(e) {
 				<tr>
 					<td>카테고리</td>
 					<td>
-						<select name="categoryDetail_Name" onchange="change(this);">
-							<option selected="selected">--선택--</option>
-							<option value="feed">사료</option>
-							<option value="snack">간식</option>
+						<select name="categoryDetail_Name">
+							<option value="feed" ${categoryDetail_Name =="feed" ? "selected='selected'" : ""}>사료</option>
+							<option value="snack" ${categoryDetail_Name =="snack" ? "selected='selected'" : ""}>간식</option>
 						</select>
 					</td>
 				</tr>
@@ -154,14 +125,17 @@ function change(e) {
 					<td>카테고리 종류</td>
 					<td>
 						<select name="categoryDetail_kind">
-							<option>--선택--</option>
+							<option value="soft" ${categoryDetail_kind =="soft" ? "selected='selected'" : ""}>소프트</option>
+							<option value="hard" ${categoryDetail_kind =="hard" ? "selected='selected'" : ""}>하드</option>
+							<option value="dry" ${categoryDetail_kind =="dry" ? "selected='selected'" : ""}>건식</option>
+							<option value="gum" ${categoryDetail_kind =="gum" ? "selected='selected'" : ""}>껌</option>
 						</select>
 					</td>
 				</tr>
 				
 				<tr>
 					<td>상품가격</td>
-					<td> <input type="number" name="product_Price">원 </td>
+					<td> <input type="text" name="product_Price" value="${dto.product_Price}"> 원 </td>
 				</tr>
 				
 				<tr> 
@@ -175,8 +149,8 @@ function change(e) {
 					<td>공개여부</td>
 					<td>
 						<select name="product_Privacy">
-							<option value="1" ${open =="yes" ? "selected='selected'" : "" }>공개</option>
-							<option value="0" ${open =="no" ? "selected='selected'" : "" }>비공개</option>
+							<option value="1" ${product_Privacy =="1" ? "selected='selected'" : "" }>공개</option>
+							<option value="0" ${product_Privacy =="0" ? "selected='selected'" : "" }>비공개</option>
 						</select>
 					</td>
 				</tr>
@@ -184,7 +158,7 @@ function change(e) {
 				<tr>
 					<td>사&nbsp;&nbsp;&nbsp;&nbsp;진</td>
 					<td style="text-align: left;"> 
-						<input type="file" name="selectFile">
+						<input type="file" name="image_Name">
 					</td>
 				</tr>
 			</table>
