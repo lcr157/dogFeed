@@ -3,7 +3,6 @@ package com.admin;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -29,38 +28,40 @@ public class AdminServlet extends MyServlet {
 		req.setCharacterEncoding("utf-8");
 		
 		String uri = req.getRequestURI();
-		String cp = req.getContextPath();
 		
-		// 로그인 정보
-		HttpSession session = req.getSession();
-		SessionInfo info = (SessionInfo)session.getAttribute("member");
-		
+		// 상품 관리
 		if(uri.indexOf("management.do") != -1) {
 			managementForm(req, resp);
 		}
-		
+		// 상품 정보
 		else if(uri.indexOf("article.do") != -1) {
 			article(req, resp);
 		}
-		
-		else if(uri.indexOf("salesStatus.do") != -1) {
-			salesStatusForm(req, resp);
-		}
-		
+		// 상품 등록
 		else if(uri.indexOf("write.do") != -1) {
 			writeForm(req, resp);
 		}
-		
+		// 상품 등록완료
 		else if(uri.indexOf("write_ok.do") != -1) {
 			writeSubmit(req, resp);
 		}
-		
+		// 상품 수정
 		else if(uri.indexOf("update.do") != -1) {
 			updateForm(req, resp);
 		}
-		
+		// 상품 수정완료
+		else if(uri.indexOf("update_ok.do") != -1) {
+			updateSubmit(req, resp);
+		}
+		// 상품 삭제
 		else if(uri.indexOf("delete.do") != -1) {
-			deleteFile(req, resp);
+			delete(req, resp);
+		}
+		
+		
+		// 판매현황
+		else if(uri.indexOf("salesStatus.do") != -1) {
+			salesStatusForm(req, resp);
 		}
 	}
 	
@@ -96,7 +97,7 @@ public class AdminServlet extends MyServlet {
 			}
 			
 			
-			int rows = 10;
+			int rows = 5;
 			int dataCount=0, total_page;
 			
 			// 검색인 경우 -> condition과 keyword 넣어주기
@@ -125,12 +126,13 @@ public class AdminServlet extends MyServlet {
 			}
 						
 			// 게시판 게시글의 순서 변수
+			// 현재시간 : curDate, 등록시간 : date
 			int listNum, n=0;
 			long gap;
 			Date curDate = new Date(); 
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			
-			
+			// 게시판 게시글의 순서 변수
 			for(ProductDTO dto : list) {
 				listNum = dataCount - (start + n - 1);
 				dto.setListNum(listNum);
@@ -147,13 +149,15 @@ public class AdminServlet extends MyServlet {
 			}
 			
 			String query = "";
+			if (keyword.length() != 0) {
+				query = "condition=" + condition + "&keyword=" + URLEncoder.encode(keyword, "utf-8");
+			}
 			String listUrl, articleUrl;
 			
 			listUrl = cp + "/admin/management.do";
 			articleUrl = cp + "/admin/article.do?page=" + current_page;
 			
-			if(keyword.length() == 0) {
-				query += "condition="+condition+"&keyword"+URLEncoder.encode(keyword, "utf-8");listUrl = "?" + query;
+			if (query.length() != 0) {
 				listUrl += "?" + query;
 				articleUrl += "&" + query;
 			}
@@ -200,45 +204,38 @@ public class AdminServlet extends MyServlet {
 		try {
 			ProductDTO dto = new ProductDTO();
 			
-			
 			dto.setProduct_Name(req.getParameter("product_Name"));
 			dto.setProduct_Price(Integer.parseInt(req.getParameter("product_Price")));
 			dto.setProduct_Info(req.getParameter("product_Info"));
 			dto.setProduct_Privacy(Integer.parseInt(req.getParameter("product_Privacy")));
-			dto.setCategoryDetail_Name(req.getParameter("categoryDetail_Name"));
-			dto.setCategoryDetail_Kind(req.getParameter("categoryDetail_kind"));
+			dto.setCategory_Num(Integer.parseInt(req.getParameter("category_Num")));
 			
-			// 카테고리번호는 상세카테고리이름과 상세카테고리종류에 따라 나뉜다.
-			String name = req.getParameter("categoryDetail_Name");
+			// 상세카테고리이름과 상세카테고리종류를 정확히 명시해준다.
+			String name = req.getParameter("category_Num");
 			String kind = req.getParameter("categoryDetail_kind");
-			
-			int num = 0;
-			if((name.equals("feed") && kind.equals("soft"))) {
-				num = 1;
-				dto.setCategory_Num(num);
+			if(req.getParameter("category_Num").equals("1")) {
+				name = "사료";
+				kind = "소프트";
+			} else if(req.getParameter("category_Num").equals("2")) {
+				name = "사료";
+				kind = "하드";
+			} else if(req.getParameter("category_Num").equals("3")) {
+				name = "간식";
+				kind = "건식";
+			} else if(req.getParameter("category_Num").equals("4")) {
+				name = "간식";
+				kind = "껌";
 			}
 			
-			else if(name.equals("feed") && kind.equals("hard")) {
-				num = 2;
-				dto.setCategory_Num(num);
-			}
-			
-			else if(name.equals("snack") && kind.equals("dry")) {
-				num = 3;
-				dto.setCategory_Num(num);		
-			}
-			
-			else if(name.equals("snack") && kind.equals("gum")) {
-				num = 4;
-				dto.setCategory_Num(num);
-			}
+			dto.setCategoryDetail_Name(name);
+			dto.setCategoryDetail_Kind(kind);
 			
 			dao.insertProduct(dto);
 			resp.sendRedirect(cp + "/admin/management.do");
 			return;
 			
 		} catch (Exception e) {
-			message = " 실패 했습니다.";
+			message = "실패 했습니다.";
 			e.printStackTrace();
 		}
 		
@@ -246,43 +243,178 @@ public class AdminServlet extends MyServlet {
 		forward(req, resp, "/WEB-INF/views/admin/management.jsp");
 	}
 		
+	
 	// 게시글 보기
 	protected void article(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String cp = req.getContextPath();
+		ProductDAO dao = new ProductDAO();
+		MyUtil util = new MyUtil();
 		
+		String cp = req.getContextPath();
+		String page = req.getParameter("page");
+		String query = "page=" + page;
+
 		try {
-			// 정상 작동시 article로 이동
+			int num = Integer.parseInt(req.getParameter("num"));
+			
+			String condition = req.getParameter("condition");
+			String keyword = req.getParameter("keyword");
+			if (condition == null) {
+				condition = "all";
+				keyword = "";
+			}
+			keyword = URLDecoder.decode(keyword, "utf-8");
+
+			if (keyword.length() != 0) {
+				query += "&condition=" + condition + "&keyword=" + URLEncoder.encode(keyword, "UTF-8");
+			}
+
+			// 조회수 증가
+			dao.updateHitCount(num);
+
+			
+			// 게시물 가져오기
+			ProductDTO dto = dao.readProdcuct(num);
+			if (dto == null) { // 게시물이 없으면 다시 리스트로
+				resp.sendRedirect(cp + "/admin/management.do?" + query);
+				return;
+			}
+			dto.setProduct_Info(util.htmlSymbols(dto.getProduct_Info()));
+
+			
+			// 이전글 다음글
+			ProductDTO preReadDto = dao.preReadProdcuct(dto.getProduct_Num(), condition, keyword);
+			ProductDTO nextReadDto = dao.nextReadProdcuct(dto.getProduct_Num(), condition, keyword);
+			
+			// JSP로 전달할 속성
+			req.setAttribute("dto", dto);
+			req.setAttribute("page", page);
+			req.setAttribute("query", query);
+			req.setAttribute("preReadDto", preReadDto);
+			req.setAttribute("nextReadDto", nextReadDto);			
+			
+			// 포워딩
 			forward(req, resp, "/WEB-INF/views/admin/article.jsp");
 			return;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		resp.sendRedirect(cp+"/admin/management.do");
+
+		resp.sendRedirect(cp + "/admin/management.do?" + query);
 	}
 		
+	
+	// 수정
+	protected void updateForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		ProductDAO dao = new ProductDAO();
+		
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		
+		String cp = req.getContextPath();
+		String page = req.getParameter("page");
+		
+		try {
+			int num = Integer.parseInt(req.getParameter("num"));
+			ProductDTO dto = dao.readProdcuct(num);
+			if(dto == null) {
+				resp.sendRedirect(cp+"admin/management.do?page="+page);
+				return;
+			}
+			
+			// 관리자가 아니라면 -> 상품관리로 이동
+			if(! info.getUserId().equals("admin")) {
+				resp.sendRedirect(cp+"admin/management.do?page="+page);
+				return;
+			}
+			
+			req.setAttribute("dto", dto);
+			req.setAttribute("page", page);
+			req.setAttribute("mode", "update");
+			
+			forward(req, resp, "/WEB-INF/views/admin/write.jsp");
+			return;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		resp.sendRedirect(cp + "/admin/management.do?page="+page);
+		
+	}
+	
+	
+	// 수정 완료
+	protected void updateSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		ProductDAO dao = new ProductDAO();
+		
+		String cp = req.getContextPath();
+		String page = req.getParameter("page");
+		
+		if(req.getMethod().equalsIgnoreCase("GET")) {
+			resp.sendRedirect(cp+"/admin/management.do");
+			return;
+		}
+		
+		try {
+			ProductDTO dto = new ProductDTO();
+			
+			dto.setProduct_Name(req.getParameter("product_Name"));
+			dto.setCategory_Num(Integer.parseInt(req.getParameter("category_Num")));
+			dto.setProduct_Price(Integer.parseInt(req.getParameter("product_Price")));
+			dto.setProduct_Info(req.getParameter("product_Info"));
+			dto.setProduct_Privacy(Integer.parseInt(req.getParameter("product_Privacy")));
+			dto.setProduct_Num(Integer.parseInt(req.getParameter("num")));
+						
+			dao.updateBoard(dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		resp.sendRedirect(cp + "/admin/management.do?page=" + page);
+	}
+	
+	
+	// 삭제
+	protected void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		ProductDAO dao = new ProductDAO();
+		
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+
+		String cp = req.getContextPath();
+		String page = req.getParameter("page");
+		String query = "page=" + page;
+		
+		try {
+			int num = Integer.parseInt(req.getParameter("num"));
+			String condition = req.getParameter("condition");
+			String keyword = req.getParameter("keyword");
+			if (condition == null) {
+				condition = "all";
+				keyword = "";
+			}
+			keyword = URLDecoder.decode(keyword, "utf-8");
+
+			if (keyword.length() != 0) {
+				query += "&condition=" + condition + "&keyword=" + URLEncoder.encode(keyword, "UTF-8");
+			}
+			
+			if(info.getUserId().equals("admin")) {
+				dao.deleteProduct(num);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		resp.sendRedirect(cp + "/admin/management.do?" + query);
+	}
+	
+	
 	// 판매현황
 	protected void salesStatusForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		forward(req, resp, "/WEB-INF/views/admin/salesStatus.jsp");
 	}	
 	
-	// 수정
-	protected void updateForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		req.setAttribute("mode", "update");
-		forward(req, resp, "/WEB-INF/views/admin/write.jsp");
-	}
 	
-	// 삭제
-	protected void deleteFile(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String cp = req.getContextPath();
-		
-		try {
-			
-		} catch (Exception e) {	
-			e.printStackTrace();
-		}
-		
-		resp.sendRedirect(cp+"/admin/management.do");
-	}
 	
 }

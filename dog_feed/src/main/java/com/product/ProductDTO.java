@@ -4,6 +4,8 @@ package com.product;
 public class ProductDTO {
 	// listNum은 순서정렬 용도
 	private int listNum;
+	// num은 시퀀스 값 저장을 위한 용도
+	private int num;
 	private int product_Num;
 	private int category_Num;
 	private String product_Name;
@@ -13,7 +15,6 @@ public class ProductDTO {
 	private int product_Hits;
 	private int product_Privacy;
 	
-	private int categoryDetail_Num;
 	private String categoryDetail_Name;
 	private String categoryDetail_Kind;
 	
@@ -21,6 +22,12 @@ public class ProductDTO {
 	private long gap;
 	
 	
+	public int getNum() {
+		return num;
+	}
+	public void setNum(int num) {
+		this.num = num;
+	}
 	public long getGap() {
 		return gap;
 	}
@@ -80,12 +87,6 @@ public class ProductDTO {
 	}
 	public void setProduct_Privacy(int product_Privacy) {
 		this.product_Privacy = product_Privacy;
-	}
-	public int getCategoryDetail_Num() {
-		return categoryDetail_Num;
-	}
-	public void setCategoryDetail_Num(int categoryDetail_Num) {
-		this.categoryDetail_Num = categoryDetail_Num;
 	}
 	public String getCategoryDetail_Name() {
 		return categoryDetail_Name;

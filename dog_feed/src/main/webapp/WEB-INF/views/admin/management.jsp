@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>상품 관리</title>
 <link rel="icon" href="data:;base64,iVBORw0KGgo=">
 <!-- Favicon-->
 <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
@@ -41,7 +41,7 @@ function searchList() {
 		
 		<table class="table">
 			<tr>
-				<td width="50%" style="text-align: left;">${dataCount}1개(${page}1/${total_page}1 페이지)</td>
+				<td width="50%" style="text-align: left;">${dataCount}개(${page}/${total_page}페이지)</td>
 				<td>&nbsp;</td>
 			</tr>
 		</table>
@@ -62,41 +62,13 @@ function searchList() {
 			<c:forEach var="dto" items="${list}">
 				<tr>
 					<td>${dto.listNum}</td>
-					<td>
-						<c:if test="${dto.categoryDetail_Name eq 'feed'}">
-								사료
-						</c:if>
-						
-						<c:if test="${dto.categoryDetail_Name eq 'snack'}">
-								간식
-						</c:if>
-					</td>
-					<td>
-						<c:if test="${dto.categoryDetail_Name eq 'feed'}">
-							<c:if test="${dto.categoryDetail_Kind eq 'hard'}">
-									하드
-							</c:if>
-							
-							<c:if test="${dto.categoryDetail_Kind eq 'soft'}">
-									소프트
-							</c:if>
-						</c:if>
-						
-						<c:if test="${dto.categoryDetail_Name eq 'snack'}">
-							<c:if test="${dto.categoryDetail_Kind eq 'dry'}">
-									건식
-							</c:if>
-							
-							<c:if test="${dto.categoryDetail_Kind eq 'gum'}">
-									껌
-							</c:if>
-						</c:if>
-					</td>
+					<td>${dto.categoryDetail_Name}</td>
+					<td>${dto.categoryDetail_Kind}</td>
 					<td>
 						<a href="${articleUrl}&num=${dto.product_Num}">${dto.product_Name}</a>
 					</td>
 					<td>${dto.product_Price}원</td>
-					<td>${dto.product_Date.substring(0, 10)}</td>
+					<td>${dto.product_Date}</td>
 					<td>${dto.product_Hits}</td>
 					<td>
 						<c:if test="${dto.product_Privacy eq '1'}">
@@ -107,20 +79,11 @@ function searchList() {
 							비공개
 						</c:if>
 					</td>
-					<td>
-					<c:if test="${dto.product_Privacy} == 1">
-						공개
-					</c:if>
-					
-					<c:if test="${dto.product_Privacy} == 0">
-						비공개
-					</c:if>
-					</td>
 				</tr>
 				</c:forEach>
 		</table>			
 		
-		<div style='margin: 20px 0;'>
+		<div style='margin: 20px 0; text-align: center;'>
 			${dataCount == 0 ? "등록된 게시물이 없습니다." : paging }
 		</div>
 			
@@ -132,13 +95,13 @@ function searchList() {
 				<td>
 					<form name="searchForm" action="${pageContext.request.contextPath}/admin/management.do">
 						<select name="condition">
-							<option value="all">상품명+내용</option>
-							<option value="product_Num">상품번호</option>
-							<option value="categoryDetail_Name">상품카테고리</option>
-							<option value="categoryDetail_Kind">상품카테고리 종류</option>
-							<option value="product_Date">상품등록일</option>
+							<option value="all" ${condition =="all" ? "selected='selected'" : "" }>상품명+내용</option>
+							<option value="categoryDetail_Name" ${condition =="categoryDetail_Name" ? "selected='selected'" : "" }>상품카테고리</option>
+							<option value="categoryDetail_Kind" ${condition =="categoryDetail_Kind" ? "selected='selected'" : "" }>상품카테고리 종류</option>
+							<option value="product_Date" ${condition =="product_Date" ? "selected='selected'" : "" }>상품등록일</option>
+							<option value="product_Privacy" ${condition =="product_Privacy" ? "selected='selected'" : "" }>상품공개여부</option>
 						</select>
-						<input type="text" name="keyword">
+						<input type="text" name="keyword" value="${keyword}">
 						<button class="btn" type="button" onclick="searchList();">검색</button>
 					</form>
 				</td>

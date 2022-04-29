@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>판매현황</title>
 <link rel="icon" href="data:;base64,iVBORw0KGgo=">
 <!-- Favicon-->
 <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
@@ -49,22 +49,22 @@ function searchList() {
 		
 		<table class="table">
 			<tr>
-				<th>상품번호</th>
-				<th>상품카테고리코드</th>
+				<th>구매자명</th>
+				<th>구매자아이디</th>
 				<th>상품명</th>
 				<th>상품가격</th>
-				<th>판매개수</th>
+				<th>구매개수</th>
 				<th>총액</th>
 			</tr>
 				
 			<tr>
-						<!-- 게시글 자리 -->
-				<td>1</td>
-				<td>1</td>
-				<td>강아지사료1</td>
-				<td>30,000원</td>
+				<!-- 게시글 자리 -->
+				<td>손님</td>
+				<td>guest</td>
+				<td>제일껌</td>
+				<td>1200원</td>
 				<td>3개</td>
-				<td>90,000원</td>
+				<td>3600원</td>
 			</tr>
 		</table>			
 		

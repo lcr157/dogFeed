@@ -7,7 +7,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>상품등록</title>
+<title>${mode=='update'?"상품수정":"상품등록"}</title>
+
 <link rel="icon" href="data:;base64,iVBORw0KGgo=">
 <!-- Favicon-->
 <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
@@ -60,7 +61,7 @@ function sendBoard() {
 	}
 	
 	str = f.product_Price.value.trim();
-	if(!str){
+	if(! str){
 		alert("상품가격을 입력하세요");
 		f.product_Price.focus();
 		return;
@@ -94,7 +95,7 @@ function sendBoard() {
 	
 	
 	<main>
-		<h3>상품등록</h3>
+		<h3>${mode=='update'?"상품수정":"상품등록"}</h3>
 		<p></p>
 		
 		<form name="boardForm" method="post">
@@ -102,7 +103,7 @@ function sendBoard() {
 				<tr>
 					<td>상품명</td>
 					<td>
-						<input type="text" name="product_Name" maxlength="100" class="form-control" value="${dto.subject }">
+						<input type="text" name="product_Name" maxlength="100" class="form-control" value="${dto.product_Name}">
 					</td>
 				</tr>
 				
@@ -115,8 +116,8 @@ function sendBoard() {
 					<td>카테고리</td>
 					<td>
 						<select name="categoryDetail_Name">
-							<option value="feed" ${categoryDetail_Name =="feed" ? "selected='selected'" : ""}>사료</option>
-							<option value="snack" ${categoryDetail_Name =="snack" ? "selected='selected'" : ""}>간식</option>
+							<option value="feed" ${dto.categoryDetail_Name =="사료" ? "selected='selected'" : ""}>사료</option>
+							<option value="snack" ${dto.categoryDetail_Name =="간식" ? "selected='selected'" : ""}>간식</option>
 						</select>
 					</td>
 				</tr>
@@ -124,18 +125,18 @@ function sendBoard() {
 				<tr>
 					<td>카테고리 종류</td>
 					<td>
-						<select name="categoryDetail_kind">
-							<option value="soft" ${categoryDetail_kind =="soft" ? "selected='selected'" : ""}>소프트</option>
-							<option value="hard" ${categoryDetail_kind =="hard" ? "selected='selected'" : ""}>하드</option>
-							<option value="dry" ${categoryDetail_kind =="dry" ? "selected='selected'" : ""}>건식</option>
-							<option value="gum" ${categoryDetail_kind =="gum" ? "selected='selected'" : ""}>껌</option>
+						<select name="category_Num">
+							<option value="1">사료 - 소프트</option>
+							<option value="2">사료 - 하드</option>
+							<option value="3">간식 - 건식</option>
+							<option value="4">간식 - 껌</option>
 						</select>
 					</td>
 				</tr>
 				
 				<tr>
 					<td>상품가격</td>
-					<td> <input type="text" name="product_Price" value="${dto.product_Price}"> 원 </td>
+					<td> <input type="number" name="product_Price" value="${dto.product_Price}"> 원 </td>
 				</tr>
 				
 				<tr> 
@@ -149,8 +150,8 @@ function sendBoard() {
 					<td>공개여부</td>
 					<td>
 						<select name="product_Privacy">
-							<option value="1" ${product_Privacy =="1" ? "selected='selected'" : "" }>공개</option>
-							<option value="0" ${product_Privacy =="0" ? "selected='selected'" : "" }>비공개</option>
+							<option value="1" ${dto.product_Privacy =="1" ? "selected='selected'" : "" }>공개</option>
+							<option value="0" ${dto.product_Privacy =="0" ? "selected='selected'" : "" }>비공개</option>
 						</select>
 					</td>
 				</tr>
@@ -171,8 +172,8 @@ function sendBoard() {
 						<button class="btn" type="reset">다시입력</button>
 						<button class="btn" type="button" onclick="location.href='${pageContext.request.contextPath}/admin/management.do';">${mode=="update"?"수정취소":"등록취소"}</button>
 						<c:if test="${mode=='update'}">
-							<input type="hidden" name="num" value="${dto.num }">
-							<input type="hidden" name="page" value="${page }">
+							<input type="hidden" name="num" value="${dto.product_Num}">
+							<input type="hidden" name="page" value="${page}">
 						</c:if>
 					</td>
 				</tr>

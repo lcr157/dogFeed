@@ -12,26 +12,32 @@ import com.util.DBConn;
 public class ProductDAO {
 	private Connection conn = DBConn.getConnection();
 	
+	
 	// 상품등록
 	public void insertProduct(ProductDTO dto) throws SQLException {
 		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		String sql;
-
+		int seq;
+		
 		try {
-			conn.setAutoCommit(false);
-
-			sql = "INSERT INTO CategoryDetail(category_Num, categoryDetail_Name, categoryDetail_Kind) "
-					+ " VALUES (?, ?, ?)";
-			pstmt = conn.prepareStatement(sql);
-
-			pstmt.setInt(1, dto.getCategory_Num());
-			pstmt.setString(2, dto.getCategoryDetail_Name());
-			pstmt.setString(3, dto.getCategoryDetail_Kind());
+			// 다음 시퀀스값 가져오기
+			sql = "SELECT Category_seq.NEXTVAL FROM dual";
 			
-			pstmt.executeUpdate();
-
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			seq = 0;
+			if(rs.next()) {
+				seq = rs.getInt(1);
+			}
+			dto.setNum(seq);
+			
+			rs.close();
 			pstmt.close();
+			rs = null;
 			pstmt = null;
+			
 
 			sql = "INSERT INTO Product(product_Num, category_Num, product_Name, product_Price, product_Info, "
 					+ " product_Date, product_Hits, product_Privacy) "
@@ -46,29 +52,25 @@ public class ProductDAO {
 			
 			pstmt.executeUpdate();
 
-			conn.commit();
-
-		} catch (SQLException e) {
-			try {
-				conn.rollback();
-			} catch (SQLException e2) {
-			}
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
 		} finally {
-			if (pstmt != null) {
+			if(pstmt != null) {
 				try {
 					pstmt.close();
-				} catch (SQLException e) {
+				} catch (Exception e2) {
 				}
 			}
-
-			try {
-				conn.setAutoCommit(true);
-			} catch (SQLException e2) {
+			
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
 			}
 		}
-
+		
 	}
 	
 	
@@ -318,6 +320,318 @@ public class ProductDAO {
 		return list;
 	}
 		
+	
+	// 조회수 증가하기
+	public void updateHitCount(int num) throws SQLException {
+		PreparedStatement pstmt = null;
+		String sql;
+
+		try {
+			sql = "UPDATE Product SET product_Hits=product_Hits+1 WHERE product_Num=?";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, num);
+			
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e2) {
+				}
+			}
+		}
+
+	}
+
+	
+	// 해당 게시물 보기
+	public ProductDTO readProdcuct(int num) {
+		ProductDTO dto = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+
+		try {
+			sql = "SELECT product_Num, product_Name, product_Info, product_Date, product_Hits, "
+					+ " product_Price, product_Privacy, categoryDetail_Name, categoryDetail_Kind "
+					+ " FROM Product p "
+					+ " JOIN CategoryDetail c ON p.category_Num = c.category_Num "
+					+ " WHERE product_Num = ? ";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, num);
+
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				dto = new ProductDTO();
+				
+				dto.setProduct_Num(rs.getInt("product_Num"));
+				dto.setProduct_Name(rs.getString("product_Name"));
+				dto.setProduct_Info(rs.getString("product_Info"));
+				dto.setProduct_Date(rs.getString("product_Date"));
+				dto.setProduct_Hits(rs.getInt("product_Hits"));
+				dto.setProduct_Price(rs.getInt("product_Price"));
+				dto.setProduct_Privacy(rs.getInt("product_Privacy"));
+				dto.setCategoryDetail_Name(rs.getString("categoryDetail_Name"));
+				dto.setCategoryDetail_Kind(rs.getString("categoryDetail_Kind"));
+								
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+				}
+			}
+
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
+
+		return dto;
+	}
+
+	
+	// 이전글
+	public ProductDTO preReadProdcuct(int num, String condition, String keyword) {
+		ProductDTO dto = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		StringBuilder sb = new StringBuilder();
+
+		try {
+			if (keyword != null && keyword.length() != 0) {
+				sb.append(" SELECT * FROM ( ");
+				sb.append("    SELECT product_Num, product_Name ");
+				sb.append("    FROM Product ");
+				sb.append("    WHERE ( product_Num > ? ) ");
+
+				// 상품명+내용인 경우 : product_Name, product_Info
+				if(condition.equals("all")) {
+					sb.append("WHERE INSTR(product_Name, ?) >= 1 OR INSTR(product_Info, ?) >= 1 ");
+				}
+				
+				// 등록일인 경우 : product_Date
+				else if(condition.equals("product_Date")) {
+					keyword = keyword.replaceAll("(\\-|\\.|\\/.)", "");
+					sb.append("WHERE TO_CHAR(product_Date, 'YYYYMMDD') = ? ");
+				}
+				
+				// 나머지의 경우
+				else {
+					sb.append("WHERE INSTR(" + condition + ", ?) >= 1 ");
+				}
+				
+				sb.append("          ORDER BY product_Num ASC ");
+				sb.append("       ) WHERE ROWNUM 1 ");
+			
+				pstmt = conn.prepareStatement(sb.toString());
+				
+				pstmt.setInt(1, num);
+				pstmt.setString(2, keyword);
+				if (condition.equals("all")) {
+					pstmt.setString(3, keyword);
+				}
+			} else {
+				sb.append(" SELECT * FROM ( ");
+				sb.append("    SELECT product_Num, product_Name FROM Product ");
+				sb.append("     WHERE product_Num > ? ");
+				sb.append("     ORDER BY product_Num ASC ");
+				sb.append(" ) WHERE ROWNUM = 1 ");
+
+				pstmt = conn.prepareStatement(sb.toString());
+				
+				pstmt.setInt(1, num);
+			}
+
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				dto = new ProductDTO();
+				
+				dto.setProduct_Num(rs.getInt("Product_Num"));
+				dto.setProduct_Name(rs.getString("product_Name"));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+				}
+			}
+
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
+
+		return dto;
+	}
+
+	
+	// 다음글
+	public ProductDTO nextReadProdcuct(int num, String condition, String keyword) {
+		ProductDTO dto = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		StringBuilder sb = new StringBuilder();
+
+		try {
+			if (keyword != null && keyword.length() != 0) {
+				sb.append(" SELECT * FROM ( ");
+				sb.append("    SELECT product_Num, product_Name ");
+				sb.append("    FROM Product ");
+				sb.append("    WHERE ( product_Num < ? ) ");
+
+				// 상품명+내용인 경우 : product_Name, product_Info
+				if(condition.equals("all")) {
+					sb.append("WHERE INSTR(product_Name, ?) >= 1 OR INSTR(product_Info, ?) >= 1 ");
+				}
+				
+				// 등록일인 경우 : product_Date
+				else if(condition.equals("product_Date")) {
+					keyword = keyword.replaceAll("(\\-|\\.|\\/.)", "");
+					sb.append("WHERE TO_CHAR(product_Date, 'YYYYMMDD') = ? ");
+				}
+				
+				// 나머지의 경우
+				else {
+					sb.append("WHERE INSTR(" + condition + ", ?) >= 1 ");
+				}
+				
+				sb.append("          ORDER BY product_Num DESC ");
+				sb.append("       ) WHERE ROWNUM = 1 ");
+			
+				pstmt = conn.prepareStatement(sb.toString());
+				
+				pstmt.setInt(1, num);
+				pstmt.setString(2, keyword);
+				if (condition.equals("all")) {
+					pstmt.setString(3, keyword);
+				}
+			} else {
+				sb.append(" SELECT * FROM ( ");
+				sb.append("    SELECT product_Num, product_Name FROM Product ");
+				sb.append("     WHERE product_Num < ? ");
+				sb.append("     ORDER BY product_Num DESC ");
+				sb.append(" ) WHERE ROWNUM = 1 ");
+
+				pstmt = conn.prepareStatement(sb.toString());
+				
+				pstmt.setInt(1, num);
+			}
+
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				dto = new ProductDTO();
+				
+				dto.setProduct_Num(rs.getInt("Product_Num"));
+				dto.setProduct_Name(rs.getString("product_Name"));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+				}
+			}
+
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
+
+		return dto;
+	}
+	
+	
+	// 게시물 수정
+	public void updateBoard(ProductDTO dto) throws SQLException {
+		PreparedStatement pstmt = null;
+		String sql;
+
+		try {
+			sql = "UPDATE Product SET product_Name=?, category_Num=?, product_Price=?, "
+					+ " product_Info=?, product_Privacy=? "
+					+ " WHERE product_Num=?";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, dto.getProduct_Name());
+			pstmt.setInt(2, dto.getCategory_Num());
+			pstmt.setInt(3, dto.getProduct_Price());
+			pstmt.setString(4, dto.getProduct_Info());
+			pstmt.setInt(5, dto.getProduct_Privacy());
+			pstmt.setInt(6, dto.getProduct_Num());
+			
+			pstmt.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
+
+	}
+	
+	
+	// 상품 삭제
+	public void deleteProduct(int num) throws SQLException {
+		PreparedStatement pstmt = null;
+		String sql;
 		
-		
+		try {
+			// 관리자일경우만 삭제가능
+			sql = "DELETE FROM Product WHERE product_Num=?";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, num);
+			
+			pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
+
+	}
+
+	
 }

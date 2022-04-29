@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>${dto.product_Name}</title>
 <link rel="icon" href="data:;base64,iVBORw0KGgo=">
 <!-- Favicon-->
 <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
@@ -42,8 +42,7 @@ h3 {
 <script type="text/javascript">
 function deleteFile(fileNum) {
 	if(confirm("게시글을 삭제하시겠습니까?")) {
-		let url = "${pageContext.request.contextPath}/admin/delete.do?num=${dto.num}&page=${page}";
-		location.href = url;
+		location.href = "${pageContext.request.contextPath}/admin/delete.do?num=${dto.product_Num}&page=${page}";
 	}
 }
 
@@ -60,36 +59,55 @@ function deleteFile(fileNum) {
 	</header>
 	
 	<main>
-		<h3>상품 관리</h3>
+		<h3>상품 정보</h3>
 		<p></p>
 		
 		<table class="table table1">
 			<tr>
 				<td colspan="2" style="text-align: center;">
-					${dto.product_Name}상품명
+					${dto.product_Name}
 				</td>
 			</tr>
 				
 			<tr>
 				<td width="50%">
-					이름 : 관리자
+					등록자 : 관리자
 				</td>
 				<td align="right">
-					2022-04-04${dto.product_Date} | 조회 10${dto.product_Hits}
+					등록일 : ${dto.product_Date} | 조회수 : ${dto.product_Hits}
+				</td>
+			</tr>
+			
+			<tr>
+				<td colspan="2" width="50%" style="border-bottom: none; padding-bottom: 0;">
+					상품가격 : ${dto.product_Price}원
+				</td>
+			</tr>
+			
+			<tr>
+				<td colspan="2" style="border-bottom: none; padding-bottom: 0;">
+					상품카테고리 : ${dto.categoryDetail_Name}
+				</td>
+			</tr>
+			
+			<tr>	
+				<td colspan="2">
+					상품카테고리 종류 : ${dto.categoryDetail_Kind}
 				</td>
 			</tr>
 			
 			<tr>
 				<td colspan="2" valign="top" height="200">
-					내용${dto.product_Info}
+					상품설명 : <br>
+					${dto.product_Info}
 				</td>
 			</tr>	
 			
 			<tr>
 				<td colspan="2">
 					이전글
-					<c:if test="${not empty preReadList }">
-						<a href="${pageContext.request.contextPath}/admin/article.do?${query}&num=${preReadList.num}">${preReadList.subject}</a>
+					<c:if test="${not empty preReadDto }">
+						<a href="${pageContext.request.contextPath}/admin/article.do?${query}&num=${preReadDto.product_Num}">${preReadDto.product_Name}</a>
 					</c:if>
 				</td>
 			</tr>
@@ -97,8 +115,8 @@ function deleteFile(fileNum) {
 			<tr>
 				<td colspan="2">
 					다음글
-					<c:if test="${not empty nextReadList}">
-						<a href="${pageContext.request.contextPath}/admin/article.do?${query}&num=${nextReadList.num}">${nextReadList.subject}</a>
+					<c:if test="${not empty nextReadDto}">
+						<a href="${pageContext.request.contextPath}/admin/article.do?${query}&num=${nextReadDto.product_Num}">${nextReadDto.product_Name}</a>
 					</c:if>
 				</td>
 			</tr>
@@ -108,7 +126,7 @@ function deleteFile(fileNum) {
 		<table class="table table-submit">	
 			<tr>
 				<td width="50%" align="left">
-					<button class="btn" type="button" onclick="location.href='${pageContext.request.contextPath}/admin/update.do?num=${dto.num}&page=${page}';">수정</button>
+					<button class="btn" type="button" onclick="location.href='${pageContext.request.contextPath}/admin/update.do?num=${dto.product_Num}&page=${page}';">수정</button>
 					<button class="btn" type="button" onclick="deleteFile();">삭제</button>
 				</td>
 				
