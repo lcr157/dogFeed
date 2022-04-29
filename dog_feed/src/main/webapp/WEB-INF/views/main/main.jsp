@@ -15,6 +15,10 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
 <!-- Core theme CSS (includes Bootstrap)-->
 <link href="${pageContext.request.contextPath}/resource/css/styles.css" rel="stylesheet" type="text/css"/>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+
+</script>
 </head>
 
 <body>
@@ -29,6 +33,48 @@
 	<!-- Section-->
 	<section class="py-5">
 		<div class="container px-4 px-lg-5 mt-5">
+			<p style="font-weight: bold; font-size: 30px;"> 신상품 </p>
+			
+			<div
+				class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+							 <c:forEach var="dto" items="${newList}">
+				<div class="col mb-5">
+					<div class="card h-100">
+						<!-- Product image-->
+							<c:choose>
+								<c:when test="${not empty dto.image_Name}">
+									<img class="card-img-top" src="${pageContext.request.contextPath}/${dto.image_Name}">
+								</c:when>
+								<c:otherwise>
+									<img class="card-img-top" src="${pageContext.request.contextPath}/resource/img/no_Img2.jpg">
+								</c:otherwise>
+							</c:choose>			
+						<!-- Product details-->
+						<div class="card-body p-4">
+							<div class="text-center">
+								<!-- Product name-->
+								<h5 class="fw-bolder">${dto.product_Name}</h5>
+
+								<!-- Product price-->
+								 &#8361; ${dto.product_Price} 원
+							</div>
+						</div>
+						<!-- Product actions-->
+						<div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+							<div class="text-center">
+								<a class="btn btn-outline-dark mt-auto" href="${pageContext.request.contextPath}/main/product_order.do">주문하기</a>
+							</div>
+						</div>						
+					</div>
+				</div>
+			      </c:forEach>
+			</div>
+			
+		</div>
+		
+		<!--  오늘본 상품 -->
+		<div class="container px-4 px-lg-5 mt-5">
+			<p style="font-weight: bold; font-size: 30px;"> 오늘 본 상품 </p>
 			<div
 				class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
 				<div class="col mb-5">
