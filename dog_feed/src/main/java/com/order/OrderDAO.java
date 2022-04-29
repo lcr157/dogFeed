@@ -19,11 +19,12 @@ public class OrderDAO {
 		String sql;
 		
 		try {
-			sql = "SELECT order_Num, product_Num, product_Name, orderDetail_Quant, orderDetail_Price, orderDetail_Date "
+			sql = "SELECT od.order_Num, od.product_Num, p.product_Name, orderDetail_Quant, orderDetail_Price, orderDetail_Date "
 				+ " FROM OrderDetail od"
-				+ " JOIN Product p "
-				+ " ON od.product_Num = p.product_Num "
-				+ " WHERE user_Id = ?"; // 상품이름 조인
+				+ " JOIN Product p ON od.product_Num = p.product_Num "
+				+ " JOIN Order1 o ON od.order_Num = o.order_Num "
+				+ " JOIN Member m ON m.user_Id = o.user_Id"
+				+ " WHERE m.user_Id = ?"; // 상품이름 조인
 			
 			pstmt = conn.prepareStatement(sql);
 			
