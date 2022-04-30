@@ -23,13 +23,26 @@ h3 {
 	margin-left: 300px;
 }
 
+a {
+    color: #222;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+a:hover {
+	color: #FFC19E;
+	 text-decoration: underline;
+}
+
 .table {
 	width:60%;
 }
 
-.table1 {
-	border-collapse: collapse;
-	border: 1px solid black; 
+.table tr:first-child {
+	border-top: 2px solid #212529; 
+}
+
+.table-form {
 	text-align: left;
 }
 
@@ -37,8 +50,27 @@ h3 {
 	padding: 10px 0;
 }
 
+.img-box {
+	max-width: 1500px;
+	padding: 5px;
+	box-sizing: border-box;
+	border: 1px solid #ccc;
+	display: flex; /* 자손요소를 flexbox로 변경 */
+	flex-direction: row; /* 정방향 수평나열 */
+	flex-wrap: nowrap;
+	overflow-x: auto;
+}
+
+.img-box img {
+	width: 100px; height: 100px;
+	margin-right: 5px;
+	flex: 0 0 auto;
+	cursor: pointer;
+}
+
 </style>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
 function deleteFile(fileNum) {
 	if(confirm("게시글을 삭제하시겠습니까?")) {
@@ -62,7 +94,7 @@ function deleteFile(fileNum) {
 		<h3>상품 정보</h3>
 		<p></p>
 		
-		<table class="table table1">
+		<table class="table table-form">
 			<tr>
 				<td colspan="2" style="text-align: center;">
 					${dto.product_Name}
@@ -98,10 +130,21 @@ function deleteFile(fileNum) {
 			
 			<tr>
 				<td colspan="2" valign="top" height="200">
-					상품설명 : <br>
+					상품설명 <br>
 					${dto.product_Info}
 				</td>
 			</tr>	
+			
+			<tr style="border-bottom: none;">
+				<td colspan="2" height="110">
+					첨부된 사진 <p></p>
+					<div class="img-box" style="border= none;">
+						<c:forEach var="vo" items="${listFile}">
+							<img src="${pageContext.request.contextPath}/uploads/management/${vo.image_Name}">
+						</c:forEach>
+					</div>
+				</td>	
+			</tr>
 			
 			<tr>
 				<td colspan="2">
@@ -116,6 +159,7 @@ function deleteFile(fileNum) {
 				<td colspan="2">
 					다음글
 					<c:if test="${not empty nextReadDto}">
+						
 						<a href="${pageContext.request.contextPath}/admin/article.do?${query}&num=${nextReadDto.product_Num}">${nextReadDto.product_Name}</a>
 					</c:if>
 				</td>
@@ -142,5 +186,5 @@ function deleteFile(fileNum) {
 	<footer>
 		<jsp:include page="/WEB-INF/views/layout/footer.jsp"></jsp:include>
 	</footer>
-	
+
 </body> </html>

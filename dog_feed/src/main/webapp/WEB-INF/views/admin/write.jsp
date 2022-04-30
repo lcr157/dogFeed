@@ -46,8 +46,38 @@ h3 {
 	border: none;
 }
 
+.img-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 65px);
+	grid-gap: 5px;
+}
+
+.img-grid .item {
+    object-fit: cover; /* 가로세로 비율은 유지하면서 컨테이너에 꽉 차도록 설정 */
+    width: 65px;
+    height: 65px;
+	cursor: pointer;
+}
+
+.img-box {
+	max-width: 600px;
+	padding: 5px;
+	box-sizing: border-box;
+	display: flex; /* 자손요소를 flexbox로 변경 */
+	flex-direction: row; /* 정방향 수평나열 */
+	flex-wrap: nowrap;
+	overflow-x: auto;
+}
+
+.img-box img {
+	width: 37px; height: 37px;
+	margin-right: 5px;
+	flex: 0 0 auto;
+	cursor: pointer;
+}
 </style> 
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
 function sendBoard() {
 	const f = document.boardForm;
@@ -67,10 +97,9 @@ function sendBoard() {
 		return;
 	}
 	
-	str = f.product_Info.value.trim();
-	if(!str){
-		alert("상품설명을 입력하세요");
-		f.product_Info.focus();
+	str = f.selectFile.value.trim();
+	if(!str && ${mode=="write"}){
+		alert("상품 사진을 넣어주세요");
 		return;
 	}	
 	
@@ -78,10 +107,90 @@ function sendBoard() {
 	f.submit();
 }
 
+
+$(function() {
+	var sel_files = [];
+	
+	$("body").on("click", ".table-form .img-add", function(event){
+		$("form[name=boardForm] input[name=selectFile]").trigger("click"); 
+	});
+	
+	$("form[name=boardForm] input[name=selectFile]").change(function(){
+		if(! this.files) {
+			let dt = new DataTransfer();
+			for(file of sel_files) {
+				dt.items.add(file);
+			}
+			document.boardForm.selectFile.files = dt.files;
+			
+	    	return false;
+	    }
+	    
+		// 유사 배열을 배열로 변환
+        const fileArr = Array.from(this.files);
+
+		fileArr.forEach((file, index) => {
+			sel_files.push(file);
+			
+			const reader = new FileReader();
+			const $img = $("<img>", {class:"item img-item"});
+			$img.attr("data-filename", file.name);
+            reader.onload = e => {
+            	$img.attr("src", e.target.result);
+            };
+            
+            reader.readAsDataURL(file);
+            
+            $(".img-grid").append($img);
+        });
+		
+		let dt = new DataTransfer();
+		for(file of sel_files) {
+			dt.items.add(file);
+		}
+		document.boardForm.selectFile.files = dt.files;		
+	    
+	});
+	
+	$("body").on("click", ".table-form .img-item", function(event) {
+		if(! confirm("선택한 파일을 삭제 하시겠습니까 ?")) {
+			return false;
+		}
+		
+		let filename = $(this).attr("data-filename");
+		
+	    for(let i = 0; i < sel_files.length; i++) {
+	    	if(filename === sel_files[i].name){
+	    		sel_files.splice(i, 1);
+	    		break;
+			}
+	    }
+
+		let dt = new DataTransfer();
+		for(file of sel_files) {
+			dt.items.add(file);
+		}
+		document.boardForm.selectFile.files = dt.files;
+		
+		$(this).remove();
+	});
+	
+});
+
+
+<c:if test="${mode=='update'}">
+function deleteFile(image_Num) {
+	if(! confirm("이미지를 삭제 하시겠습니까 ?")) {
+		return;
+	}
+	
+	let query = "num=${dto.product_Num}&image_Num=" + image_Num + "&page=${page}";
+	let url = "${pageContext.request.contextPath}/admin/deleteFile.do?" + query;
+	location.href = url;
+}
+</c:if>
+
 </script>
-
-
-
 </head>
 
 
@@ -98,8 +207,8 @@ function sendBoard() {
 		<h3>${mode=='update'?"상품수정":"상품등록"}</h3>
 		<p></p>
 		
-		<form name="boardForm" method="post">
-			<table class="table">
+		<form name="boardForm" method="post" enctype="multipart/form-data">
+			<table class="table table-form">
 				<tr>
 					<td>상품명</td>
 					<td>
@@ -159,12 +268,27 @@ function sendBoard() {
 				<tr>
 					<td>사&nbsp;&nbsp;&nbsp;&nbsp;진</td>
 					<td style="text-align: left;"> 
-						<input type="file" name="image_Name">
+						<div class="img-grid"><img class="item img-add" src="${pageContext.request.contextPath}/resource/assets/add_photo.png"></div>
+						<input type="file" name="selectFile" accept="image/*" multiple="multiple" style="display: none;" class="form-control">
 					</td>
 				</tr>
+			
+			<c:if test="${mode=='update'}">
+					<tr>
+						<td>첨부된 사진</td>
+						<td> 
+							<div class="img-box">
+								<c:forEach var="vo" items="${listFile}">
+									<img src="${pageContext.request.contextPath}/uploads/management/${vo.image_Name}"
+									onclick="deleteFile('${vo.image_Num}');">
+								</c:forEach>
+							</div>
+						</td>
+					</tr>
+				</c:if>
 			</table>
 			<p></p>
-		
+			
 			<table class="table-submit">
 				<tr> 
 					<td align="center">

@@ -18,27 +18,8 @@ public class ProductDAO {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql;
-		int seq;
 		
 		try {
-			// 다음 시퀀스값 가져오기
-			sql = "SELECT Category_seq.NEXTVAL FROM dual";
-			
-			pstmt = conn.prepareStatement(sql);
-			rs = pstmt.executeQuery();
-			
-			seq = 0;
-			if(rs.next()) {
-				seq = rs.getInt(1);
-			}
-			dto.setNum(seq);
-			
-			rs.close();
-			pstmt.close();
-			rs = null;
-			pstmt = null;
-			
-
 			sql = "INSERT INTO Product(product_Num, category_Num, product_Name, product_Price, product_Info, "
 					+ " product_Date, product_Hits, product_Privacy) "
 					+ " VALUES (product_seq.NEXTVAL, ?, ?, ?, ?, SYSDATE, 0, ?)";
@@ -52,6 +33,20 @@ public class ProductDAO {
 			
 			pstmt.executeUpdate();
 
+			pstmt.close();
+			pstmt = null;
+			
+			if(dto.getImageFiles() != null) {
+				sql = "INSERT INTO ProductImage(image_Num, image_Name, product_Num) "
+						+ " VALUES(productImage_seq.NEXTVAL, ?, product_seq.CURRVAL) ";
+				pstmt = conn.prepareStatement(sql);
+				
+				for(int i=0; i<dto.getImageFiles().length; i++) {
+					pstmt.setString(1, dto.getImageFiles()[i]);
+					pstmt.executeUpdate();
+				}
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
@@ -348,6 +343,98 @@ public class ProductDAO {
 	}
 
 	
+	// 상품의 이미지 가져오기
+	public List<ProductDTO> listPhotoFile(int num) {
+		List<ProductDTO> list = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+
+		try {
+			sql = "SELECT image_Num, product_Num, image_Name FROM ProductImage WHERE product_Num = ?";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, num);
+			
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				ProductDTO dto = new ProductDTO();
+
+				dto.setImage_Num(rs.getInt("image_Num"));
+				dto.setProduct_Num(rs.getInt("product_Num"));
+				dto.setImage_Name(rs.getString("image_Name"));
+				
+				list.add(dto);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+				}
+			}
+
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
+
+		return list;
+	}
+	
+	
+	//  이미지번호를 통한 이미지 가져오기
+	public ProductDTO readPhotoFile(int image_Num) {
+		ProductDTO dto = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+
+		try {
+			sql = "SELECT image_Num, image_Name, product_Num FROM ProductImage WHERE image_Num = ?";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, image_Num);
+			
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				dto = new ProductDTO();
+
+				dto.setImage_Num(rs.getInt("image_Num"));
+				dto.setImage_Name(rs.getString("image_Name"));
+				dto.setProduct_Num(rs.getInt("product_Num"));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+				}
+			}
+
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
+
+		return dto;
+	}
+	
+	
 	// 해당 게시물 보기
 	public ProductDTO readProdcuct(int num) {
 		ProductDTO dto = null;
@@ -401,7 +488,7 @@ public class ProductDAO {
 
 		return dto;
 	}
-
+	
 	
 	// 이전글
 	public ProductDTO preReadProdcuct(int num, String condition, String keyword) {
@@ -413,28 +500,29 @@ public class ProductDAO {
 		try {
 			if (keyword != null && keyword.length() != 0) {
 				sb.append(" SELECT * FROM ( ");
-				sb.append("    SELECT product_Num, product_Name ");
-				sb.append("    FROM Product ");
-				sb.append("    WHERE ( product_Num > ? ) ");
+				sb.append("    SELECT product_Num, product_Name, categoryDetail_Name, categoryDetail_Kind ");
+				sb.append("    FROM Product p ");
+				sb.append("    JOIN CategoryDetail c ON p.category_Num = c.category_Num ");
+				sb.append("    WHERE product_Num > ? ");
 
 				// 상품명+내용인 경우 : product_Name, product_Info
 				if(condition.equals("all")) {
-					sb.append("WHERE INSTR(product_Name, ?) >= 1 OR INSTR(product_Info, ?) >= 1 ");
+					sb.append(" AND (INSTR(product_Name, ?) >= 1 OR INSTR(product_Info, ?) >= 1) ");
 				}
 				
 				// 등록일인 경우 : product_Date
 				else if(condition.equals("product_Date")) {
 					keyword = keyword.replaceAll("(\\-|\\.|\\/.)", "");
-					sb.append("WHERE TO_CHAR(product_Date, 'YYYYMMDD') = ? ");
+					sb.append(" AND TO_CHAR(product_Date, 'YYYYMMDD') = ? ");
 				}
 				
 				// 나머지의 경우
 				else {
-					sb.append("WHERE INSTR(" + condition + ", ?) >= 1 ");
+					sb.append(" AND INSTR(" + condition + ", ?) >= 1 ");
 				}
 				
 				sb.append("          ORDER BY product_Num ASC ");
-				sb.append("       ) WHERE ROWNUM 1 ");
+				sb.append("       ) WHERE ROWNUM = 1 ");
 			
 				pstmt = conn.prepareStatement(sb.toString());
 				
@@ -496,24 +584,25 @@ public class ProductDAO {
 		try {
 			if (keyword != null && keyword.length() != 0) {
 				sb.append(" SELECT * FROM ( ");
-				sb.append("    SELECT product_Num, product_Name ");
-				sb.append("    FROM Product ");
-				sb.append("    WHERE ( product_Num < ? ) ");
+				sb.append("    SELECT product_Num, c.category_Num, product_Name, categoryDetail_Name, categoryDetail_Kind ");
+				sb.append("    FROM Product p ");
+				sb.append("    JOIN CategoryDetail c ON p.category_Num = c.category_Num ");
+				sb.append("    WHERE product_Num < ? ");
 
 				// 상품명+내용인 경우 : product_Name, product_Info
 				if(condition.equals("all")) {
-					sb.append("WHERE INSTR(product_Name, ?) >= 1 OR INSTR(product_Info, ?) >= 1 ");
+					sb.append(" AND (INSTR(product_Name, ?) >= 1 OR INSTR(product_Info, ?) >= 1) ");
 				}
 				
 				// 등록일인 경우 : product_Date
 				else if(condition.equals("product_Date")) {
 					keyword = keyword.replaceAll("(\\-|\\.|\\/.)", "");
-					sb.append("WHERE TO_CHAR(product_Date, 'YYYYMMDD') = ? ");
+					sb.append(" AND TO_CHAR(product_Date, 'YYYYMMDD') = ? ");
 				}
 				
 				// 나머지의 경우
 				else {
-					sb.append("WHERE INSTR(" + condition + ", ?) >= 1 ");
+					sb.append(" AND INSTR(" + condition + ", ?) >= 1 ");
 				}
 				
 				sb.append("          ORDER BY product_Num DESC ");
@@ -590,6 +679,22 @@ public class ProductDAO {
 			
 			pstmt.executeUpdate();
 
+			
+			pstmt.close();
+			pstmt = null;
+
+			if (dto.getImageFiles() != null) {
+				sql = "INSERT INTO ProductImage(image_Num, image_Name, product_Num)"
+						+ " VALUES(productImage_seq.NEXTVAL, ?, ?) ";
+				pstmt = conn.prepareStatement(sql);
+				
+				for (int i = 0; i < dto.getImageFiles().length; i++) {
+					pstmt.setString(1, dto.getImageFiles()[i]);
+					pstmt.setInt(2, dto.getProduct_Num());
+					pstmt.executeUpdate();
+				}
+			}
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw e;
@@ -598,6 +703,38 @@ public class ProductDAO {
 				try {
 					pstmt.close();
 				} catch (SQLException e) {
+				}
+			}
+		}
+
+	}
+	
+	
+	// 상품 이미지 삭제
+	public void deletePhotoFile(String mode, int num) throws SQLException {
+		PreparedStatement pstmt = null;
+		String sql;
+
+		try {
+			if (mode.equals("all")) {
+				sql = "DELETE FROM ProductImage WHERE product_Num = ?";
+			} else {
+				sql = "DELETE FROM ProductImage WHERE image_Num = ?";
+			}
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, num);
+
+			pstmt.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e2) {
 				}
 			}
 		}

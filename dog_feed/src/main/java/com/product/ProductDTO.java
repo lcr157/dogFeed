@@ -18,6 +18,11 @@ public class ProductDTO {
 	private String categoryDetail_Name;
 	private String categoryDetail_Kind;
 	
+	private int image_Num;
+	private String image_Name;
+	private String[] imageFiles;
+	
+	
 	// gap은 시간 측정용도
 	private long gap;
 	
@@ -100,6 +105,24 @@ public class ProductDTO {
 	public void setCategoryDetail_Kind(String categoryDetail_Kind) {
 		this.categoryDetail_Kind = categoryDetail_Kind;
 	}
-		
+	public int getImage_Num() {
+		return image_Num;
+	}
+	public void setImage_Num(int image_Num) {
+		this.image_Num = image_Num;
+	}
+	public String getImage_Name() {
+		return image_Name;
+	}
+	public void setImage_Name(String image_Name) {
+		this.image_Name = image_Name;
+	}
+	public String[] getImageFiles() {
+		return imageFiles;
+	}
+	public void setImageFiles(String[] imageFiles) {
+		this.imageFiles = imageFiles;
+	}
+	
 	
 }

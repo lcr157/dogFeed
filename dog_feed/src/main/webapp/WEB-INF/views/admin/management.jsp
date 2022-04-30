@@ -18,11 +18,27 @@
 <!-- admin css가져오기 -->
 <link href="${pageContext.request.contextPath}/resource/css/admin.css" rel="stylesheet" type="text/css"/>
 
+<style type="text/css">
+a {
+    color: #222;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+a:hover {
+	color: #FFC19E;
+	 text-decoration: underline;
+}
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
 function searchList() {
 	const f = document.searchForm;
 	f.submit();
 }
+
+
 </script>
 </head>
 

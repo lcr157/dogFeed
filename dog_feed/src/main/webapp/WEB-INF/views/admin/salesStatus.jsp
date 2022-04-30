@@ -49,6 +49,7 @@ function searchList() {
 		
 		<table class="table">
 			<tr>
+				<th>주문날짜</th>
 				<th>구매자명</th>
 				<th>구매자아이디</th>
 				<th>상품명</th>
@@ -59,6 +60,7 @@ function searchList() {
 				
 			<tr>
 				<!-- 게시글 자리 -->
+				<td>2022-XX-XX</td>
 				<td>손님</td>
 				<td>guest</td>
 				<td>제일껌</td>
@@ -80,9 +82,10 @@ function searchList() {
 				<td>
 					<form name="searchForm" action="${pageContext.request.contextPath}/admin/salesStatus.do">
 						<select name="condition">
+							<option value="all">주문날짜</option>
+							<option value="all">구매자명</option>
+							<option value="all">구매자아이디</option>
 							<option value="all">상품명</option>
-							<option value="all">상품번호</option>
-							<option value="all">상품카테고리코드</option>
 						</select>
 						<input type="text" name="keyword">
 						<button class="btn" type="button" onclick="searchList();">검색</button>
