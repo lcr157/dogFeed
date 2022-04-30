@@ -63,7 +63,7 @@
             <div class="navbar-collapse" id="navbarSupportedContent" style="flex-grow: 0;">
 				<ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
 					<c:if test="${empty sessionScope.member}">
-	                	<li class="nav-item dropdown" style="text-align:right;">
+	                	<li class="nav-item dropdown">
 	                		<a class="nav-link" href="${pageContext.request.contextPath}/member/login.do">로그인</a>
 	                	</li>
 	                	
