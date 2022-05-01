@@ -58,20 +58,20 @@ public class MemberServlet extends MyServlet {
 	
 	// 로그인 처리
 	protected void loginSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		HttpSession session = req.getSession();
+		HttpSession session = req.getSession(); // 세션 공간 만듦
 
-		MemberDAO dao = new MemberDAO();
-		String cp = req.getContextPath();
+		MemberDAO dao = new MemberDAO(); // DB에서 데이터 가져오는 객체
+		String cp = req.getContextPath(); // default context 경로
 
-		if (req.getMethod().equalsIgnoreCase("GET")) {
+		if (req.getMethod().equalsIgnoreCase("GET")) { // method : get / post
 			resp.sendRedirect(cp + "/");
 			return;
 		}
 
-		String user_Id = req.getParameter("user_Id");
-		String user_Pwd = req.getParameter("user_Pwd");
+		String user_Id = req.getParameter("user_Id"); // name = user_Id
+		String user_Pwd = req.getParameter("user_Pwd"); // name = user_Pwd jsp 참고
 				
-		MemberDTO dto = dao.loginMember(user_Id, user_Pwd);
+		MemberDTO dto = dao.loginMember(user_Id, user_Pwd); // id, pwd 통해서 해당 회원 정보 가져오기
 		
 		if (dto != null) {
 			// 로그인 성공 : 로그인정보를 서버에 저장
@@ -83,6 +83,8 @@ public class MemberServlet extends MyServlet {
 			info.setUserId(dto.getUser_Id());
 			info.setUserName(dto.getUser_Name());
 			info.setUserRoll(dto.getUser_Role());
+			//SessionInfo 난 id name roll만 챙기겠다 라는 뜻임
+			//사실상 dto로 담아도 됨
 			
 			// 세션에 member이라는 이름으로 저장
 			session.setAttribute("member", info);

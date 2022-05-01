@@ -28,9 +28,12 @@ public class MemberDAO {
 	
 	// 로그인 함수
 	public MemberDTO loginMember(String user_Id, String user_Pwd) {
-		MemberDTO dto = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
+		MemberDTO dto = null; // 해당 sql를 실행했을 때 나온 데이터 담는 용도
+		PreparedStatement pstmt = null; //DB 접속 준비 객체
+		ResultSet rs = null; // 해당 sql를 실행했을 때 나오는 데이터들
+		//dto 랑  rs 차이점은
+		//dto는 구별 -> dto는 해당 테이블의 변수값을 정의한 것
+		//rs는 그냥 가져옴 -> 그냥 어떤 테이블이던 막 가져오는 넘임
 		String sql;
 		
 		try {
@@ -58,7 +61,7 @@ public class MemberDAO {
 		} finally {
 			if(pstmt != null) {
 				try {
-					pstmt.close();
+					pstmt.close(); // DB 연결 종료
 				} catch (SQLException e2) {
 				}
 			}
