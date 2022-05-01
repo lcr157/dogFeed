@@ -1,5 +1,7 @@
 package com.member;
 
+import java.sql.Date;
+
 public class MemberDTO {
 	private String user_Id;
 	private String user_Pwd;
@@ -10,6 +12,13 @@ public class MemberDTO {
 	private String user_Address2;
 	private String user_Birth;
 	private int user_Role;
+	private Date joinDate;
+	private Date lastLogin;
+	
+	public MemberDTO() {
+		// TODO Auto-generated constructor stub
+	}
+	
 	
 	public String getUser_Id() {
 		return user_Id;
@@ -95,6 +104,27 @@ public class MemberDTO {
 	public void setUser_Role(int user_Role) {
 		this.user_Role = user_Role;
 	}
+
+
+	public Date getJoinDate() {
+		return joinDate;
+	}
+
+
+	public void setJoinDate(Date joinDate) {
+		this.joinDate = joinDate;
+	}
+
+
+	public Date getLastLogin() {
+		return lastLogin;
+	}
+
+
+	public void setLastLogin(Date lastLogin) {
+		this.lastLogin = lastLogin;
+	}
+	
 	
 
 }

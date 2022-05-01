@@ -46,7 +46,7 @@
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="${pageContext.request.contextPath}/admin/management.do">상품관리</a></li>
                         <li><a class="dropdown-item" href="${pageContext.request.contextPath}/admin/salesStatus.do">판매현황</a></li>
-                        <li><a class="dropdown-item" href="#!">고객정보(보류)</a></li>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/member/member_manager.do">고객정보</a></li>
                     </ul>
                 </li>
                 </c:if>

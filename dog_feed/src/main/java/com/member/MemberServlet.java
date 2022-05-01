@@ -44,6 +44,10 @@ public class MemberServlet extends MyServlet {
 			deleteSubmit(req, resp);
 		} else if (uri.indexOf("userIdCheck.do") != -1) {
 			userIdCheck(req, resp);
+		} else if (uri.indexOf("member_manager.do") != -1) {
+			memberManagerForm(req, resp);
+		} else if (uri.indexOf("memberDeleteOk.do") != -1) {
+			memberDeleteSubmit(req, resp);
 		}
 	}
 	
@@ -82,6 +86,9 @@ public class MemberServlet extends MyServlet {
 			
 			// 세션에 member이라는 이름으로 저장
 			session.setAttribute("member", info);
+			
+			//로그인 마지막 날짜 업데이트
+			dao.updateLastLogin(user_Id);
 			
 			// 메인화면으로 리다이렉트
 			resp.sendRedirect(cp + "/");
@@ -367,5 +374,69 @@ public class MemberServlet extends MyServlet {
 		out.print(job.toString());
 	}
 	
+	private void memberManagerForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		MemberDAO dao = new MemberDAO();
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+
+		String cp = req.getContextPath();
+		if (info == null) {
+			// 로그 아웃 상태이면
+			resp.sendRedirect(cp + "/member/login.do");
+			return;
+		}
+
+		try {
+		
+			MemberDTO dto = new MemberDTO();
+
+			dto.setUser_Id(req.getParameter("user_Id"));
+			dto.setUser_Pwd(req.getParameter("user_Pwd"));
+			dto.setUser_Name(req.getParameter("user_Name"));
+
+			String user_Email2 = req.getParameter("user_Email2");
+			String user_Email3 = req.getParameter("user_Email3");
+			dto.setUser_Email1(user_Email2 + "@" + user_Email3);
+
+			String tel1 = req.getParameter("tel1");
+			String tel2 = req.getParameter("tel2");
+			String tel3 = req.getParameter("tel3");
+			dto.setTel(tel1 + "-" + tel2 + "-" + tel3);
+
+			dto.setUser_Address1(req.getParameter("user_Address1"));
+			dto.setUser_Address2(req.getParameter("user_Address2"));
+
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		forward(req, resp, "/WEB-INF/views/member/member_manager.jsp");
+	}
+	
+	private void memberDeleteSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		MemberDAO dao = new MemberDAO();
+		HttpSession session = req.getSession();
+
+		String cp = req.getContextPath();
+		try {
+			
+			SessionInfo info = (SessionInfo) session.getAttribute("member");
+			
+			String mode = req.getParameter("mode");
+			String userId = req.getParameter("user_Id");
+			
+			// 관리자 이며 삭제 눌렀을 때
+			if (info.getUserId().equals("admin") && mode.equals("ok")) {
+				dao.deleteMember(userId);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		resp.sendRedirect(cp + "/member/member_manager.do");
+		return;
+	}
 	
 }
