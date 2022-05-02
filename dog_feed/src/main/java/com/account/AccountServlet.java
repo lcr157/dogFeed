@@ -91,13 +91,12 @@ public class AccountServlet extends MyServlet {
 			
 			dto.setUser_Id(info.getUserId());
 			
-			dto.setAccountBook_Num(Integer.parseInt(req.getParameter("accountBook_Num")));
 			dto.setAccountBook_Date(req.getParameter("accountBook_Date"));
 			dto.setContent(req.getParameter("content"));
-			dto.setAmount(Integer.parseInt(req.getParameter("content")));
+			dto.setAmount(Integer.parseInt(req.getParameter("amount")));
 			dto.setMemo(req.getParameter("memo"));
 			
-			dao.insertAccount(dto, "write");
+			dao.insertAccount(dto);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -110,7 +109,7 @@ public class AccountServlet extends MyServlet {
 		AccountDAO dao = new AccountDAO();
 		
 		HttpSession session = req.getSession();
-		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
 		
 		String cp = req.getContextPath();
 		
@@ -130,7 +129,7 @@ public class AccountServlet extends MyServlet {
 				resp.sendRedirect(cp + "/account/account.do?page=" + page);
 				return;
 			}
-
+			
 			req.setAttribute("dto", dto);
 			req.setAttribute("page", page);
 			req.setAttribute("mode", "update");

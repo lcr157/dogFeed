@@ -12,20 +12,22 @@ import com.util.DBConn;
 public class AccountDAO {
 	private Connection conn = DBConn.getConnection();
 	
-	public void insertAccount(AccountDTO dto, String mode) throws SQLException {
+	public void insertAccount(AccountDTO dto) throws SQLException {
 		// 가계부 추가
 		PreparedStatement pstmt = null;
 		String sql;
 		
 		try {
-			sql = "INSERT INTO accountBook(accountBook_Num, accountBook_Date, content, amount, memo) "
-				+ "VALUES(accountBook_seq.NEXTVAL, SYSDATE, ?, ?, ?) ";
+			sql = "INSERT INTO accountBook(accountBook_Num, user_Id, accountBook_Date, content, amount, memo) "
+				+ "VALUES(accountBook_seq.NEXTVAL, ?, ?, ?, ?, ?) ";
 			
 			pstmt = conn.prepareStatement(sql);
 			
-			pstmt.setString(1, dto.getContent());
-			pstmt.setInt(2, dto.getAmount());
-			pstmt.setString(3, dto.getMemo());
+			pstmt.setString(1, dto.getUser_Id());
+			pstmt.setString(2, dto.getAccountBook_Date());
+			pstmt.setString(3, dto.getContent());
+			pstmt.setInt(4, dto.getAmount());
+			pstmt.setString(5, dto.getMemo());
 			
 			pstmt.executeUpdate();
 			
@@ -78,15 +80,15 @@ public class AccountDAO {
 		String sql;
 		
 		try {
-			if (user_Id.equals("admin")) {
+			if (user_Id.equals("admin")) { // 관리자
 				sql = "DELETE FROM accountBook WHERE accountBook_Num=?";
 				pstmt = conn.prepareStatement(sql);
 				
 				pstmt.setInt(1, accountBook_Num);
 				
 				pstmt.executeUpdate();
-			} else {
-				sql = "DELETE FROM accountBook WHERE accountBook_Num=? AND userId=?";
+			} else { // 사용자
+				sql = "DELETE FROM accountBook WHERE accountBook_Num=? AND user_Id=?";
 				
 				pstmt = conn.prepareStatement(sql);
 				
@@ -152,7 +154,7 @@ public class AccountDAO {
 		String sql;
 		
 		try {
-			sql = "SELECT accountBook_Num, TO_CHAR(accountBook_Date, 'YYYY-MM-DD') accountBook_Date, content, amount, NVL(memo, '') memo "
+			sql = "SELECT accountBook_Num, user_Id, TO_CHAR(accountBook_Date, 'YYYY-MM-DD') accountBook_Date, content, amount, NVL(memo, '-') memo "
 				+ "FROM accountBook";
 			
 			pstmt = conn.prepareStatement(sql);
@@ -163,6 +165,7 @@ public class AccountDAO {
 				AccountDTO dto = new AccountDTO();
 				
 				dto.setAccountBook_Num(rs.getInt("accountBook_Num"));
+				dto.setUser_Id(rs.getString("user_Id"));
 				dto.setAccountBook_Date(rs.getString("accountBook_Date"));
 				dto.setContent(rs.getString("content"));
 				dto.setAmount(rs.getInt("amount"));
@@ -198,7 +201,7 @@ public class AccountDAO {
 		String sql;
 		
 		try {
-			sql = "SELECT accountBook_Num, TO_CHAR(accountBook_Date, 'YYYY-MM-DD') accountBook_Date, content, amount, NVL(memo, '') memo "
+			sql = "SELECT accountBook_Num, user_Id, TO_CHAR(accountBook_Date, 'YYYY-MM-DD') accountBook_Date, content, amount, NVL(memo, '-') memo "
 				+ " FROM accountBook WHERE accountBook_Num=?";
 			
 			pstmt = conn.prepareStatement(sql);
@@ -208,6 +211,7 @@ public class AccountDAO {
 			if(rs.next()) {
 				dto = new AccountDTO();
 				dto.setAccountBook_Num(rs.getInt("accountBook_Num"));
+				dto.setUser_Id(rs.getString("user_Id"));
 				dto.setAccountBook_Date(rs.getString("accountBook_Date"));
 				dto.setContent(rs.getString("content"));
 				dto.setAmount(rs.getInt("amount"));
@@ -230,10 +234,7 @@ public class AccountDAO {
 				}
 			}
 		}
-		
-		
 		return dto;
-		
 	}
 	
 }
