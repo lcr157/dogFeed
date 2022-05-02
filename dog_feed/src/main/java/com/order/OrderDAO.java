@@ -12,7 +12,7 @@ import com.util.DBConn;
 public class OrderDAO {
 	private Connection conn = DBConn.getConnection();
 
-	public List<OrderDTO> getOrderList(String id) {
+	public List<OrderDTO> getOrderList(String id) { // 개인이 보는 것
 		List<OrderDTO> orderList = new ArrayList<OrderDTO>();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -25,6 +25,57 @@ public class OrderDAO {
 				+ " JOIN Order1 o ON od.order_Num = o.order_Num "
 				+ " JOIN Member m ON m.user_Id = o.user_Id"
 				+ " WHERE m.user_Id = ?"; // 상품이름 조인
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, id);
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				OrderDTO dto = new OrderDTO();
+				dto.setOrder_Num(rs.getInt("order_Num"));
+				dto.setProduct_Num(rs.getInt("product_Num"));
+				dto.setProduct_Name(rs.getString("product_Name"));
+				dto.setOrderDetail_Quant(rs.getInt("orderDetail_Quant"));
+				dto.setOrderDetail_Price(rs.getInt("orderDetail_Price"));
+				dto.setOrderDetail_Date(rs.getString("orderDetail_Date"));
+				
+				orderList.add(dto);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e2) {
+				}
+			}
+			
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e2) {
+				}
+			}
+		}
+		
+		return orderList;
+	}
+	
+	public List<OrderDTO> OrderList(String id) { // 관리자가 보는것
+		List<OrderDTO> orderList = new ArrayList<OrderDTO>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		
+		try {
+			sql = "SELECT od.order_Num, od.product_Num, p.product_Name, orderDetail_Quant, orderDetail_Price, orderDetail_Date "
+				+ " FROM OrderDetail od"
+				+ " JOIN Product p ON od.product_Num = p.product_Num "
+				+ " JOIN Order1 o ON od.order_Num = o.order_Num "
+				+ " JOIN Member m ON m.user_Id = o.user_Id";
 			
 			pstmt = conn.prepareStatement(sql);
 			
