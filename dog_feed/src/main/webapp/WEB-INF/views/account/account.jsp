@@ -200,6 +200,20 @@ function diffDays(startDate, endDate) {
     return day;
 }
 
+function deleteAccount(num) {
+    if(confirm("게시글을 삭제하시겠습니까?")) {
+       let url = "${pageContext.request.contextPath}/account/delete.do?page=${page}&accountBook_Num=" + num; 
+       location.href = url;
+    }
+}
+ 
+function updateAccount(num) {
+    if(confirm("게시글을 수정하시겠습니까?")) {
+       let url = "${pageContext.request.contextPath}/account/update.do?page=${page}&accountBook_Num=" + num; 
+       location.href = url;
+    }
+}
+
 </script>
 
 
@@ -256,20 +270,6 @@ function diffDays(startDate, endDate) {
 			<tbody>
 				
 				<c:forEach var="dto" items="${accountList}">
-				<script type="text/javascript">
-
-				function deleteAccount() {
-					if(confirm("게시글을 삭제하시겠습니까?")) {
-						location.href="${pageContext.request.contextPath}/account/delete.do?accountBook_Num=${dto.accountBook_Num}&page=${page}";
-					}
-				}
-				
-				function updateAccount() {
-					if(confirm("게시글을 수정하시겠습니까?")) {
-						location.href="${pageContext.request.contextPath}/account/update.do?accountBook_Num=${dto.accountBook_Num}&page=${page}";
-					}
-				}
-				</script>
 					<tr align="center">
 						<td>${dto.accountBook_Date}</td>
 						<td>${dto.content}</td>
@@ -278,7 +278,7 @@ function diffDays(startDate, endDate) {
 						<td>
 						<c:choose>
 							<c:when test="${sessionScope.member.userId == dto.user_Id}">
-								<button type="button" class="btn" onclick="updateAccount();">수정</button>
+								<button type="button" class="btn" onclick="updateAccount(${dto.accountBook_Num});">수정</button>
 							</c:when>
 							<c:otherwise>
 								<button type="button" class="btn" disabled="disabled">수정</button>
@@ -288,7 +288,7 @@ function diffDays(startDate, endDate) {
 						<td>
 						<c:choose>
 							<c:when test="${sessionScope.member.userId == dto.user_Id}">
-								<button type="button" class="btn" onclick="deleteAccount();">삭제</button>
+								<button type="button" class="btn" onclick="deleteAccount(${dto.accountBook_Num});">삭제</button>
 							</c:when>
 							<c:otherwise>
 								<button type="button" class="btn" disabled="disabled">삭제</button>
