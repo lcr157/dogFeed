@@ -64,7 +64,7 @@ public class OrderDAO {
 		return orderList;
 	}
 	
-	public List<OrderDTO> OrderList(String id) { // 관리자가 보는것
+	public List<OrderDTO> OrderList() { // 관리자가 보는것
 		List<OrderDTO> orderList = new ArrayList<OrderDTO>();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -78,8 +78,6 @@ public class OrderDAO {
 				+ " JOIN Member m ON m.user_Id = o.user_Id";
 			
 			pstmt = conn.prepareStatement(sql);
-			
-			pstmt.setString(1, id);
 			
 			rs = pstmt.executeQuery();
 			
