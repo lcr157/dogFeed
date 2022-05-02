@@ -33,13 +33,15 @@ tr.hover:hover { cursor: pointer; background: #f5fffa; }
 	text-align: center;
 }
 .table-list .orderNum {
+	width: 70px;
 	width: 100px; color: #787878;
 }
 .table-list .productNum {
+	width: 70px;
 	color: #787878;
 }
 .table-list .productName {
-	width: 100px; color: #787878;
+	width: 200px; color: #787878;
 }
 .table-list .quant {
 	width: 100px; color: #787878;
@@ -66,7 +68,7 @@ tr.hover:hover { cursor: pointer; background: #f5fffa; }
 </header>
 
 <main>
-	<div class="body-container" style="width: 700px; height:700px; margin: 10px auto;">
+	<div class="body-container" style="width: 900px; height:700px; margin: 10px auto;">
 	<div class="body-title">
 			<h3><i class="fas fa-chalkboard-teacher"></i> 구매내역 </h3>
 	</div>
