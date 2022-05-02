@@ -43,7 +43,7 @@
 						<!-- Product image-->
 							<c:choose>
 								<c:when test="${not empty dto.image_Name}">
-									<img class="card-img-top" src="${pageContext.request.contextPath}/uploads/main/${dto.image_Name}">
+									<img class="card-img-top" src="${pageContext.request.contextPath}/uploads/management/${dto.image_Name}">
 								</c:when>
 								<c:otherwise>
 									<img class="card-img-top" src="${pageContext.request.contextPath}/resource/img/no_Img2.jpg">

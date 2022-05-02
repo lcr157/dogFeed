@@ -32,7 +32,7 @@ public class MainServlet extends MyServlet {
 		
 		// 이미지를 저장할 경로(pathname)
 		String root = session.getServletContext().getRealPath("/");
-		pathname = root + "uploads" + File.separator + "main";
+		pathname = root + "uploads" + File.separator + "management";
 		
 		if(uri.indexOf("main.do") != -1) {
 			mainItemList(req, resp);
