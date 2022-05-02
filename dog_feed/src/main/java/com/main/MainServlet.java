@@ -53,18 +53,8 @@ public class MainServlet extends MyServlet {
 			   List<MainDTO> newList = dao.newItemList();
 			   List<MainDTO> todayList = dao.newItemList();
 					   
-			   String articleUrl;
-			   String num;
-			   num = 
-			   articleUrl = cp + "/main/product_Detail.do?";
-			   
-
-			   // 포워딩할 JSP에 전달할 속성
 			   req.setAttribute("newList", newList);
 			   req.setAttribute("newList", newList);
-			   req.setAttribute("articleUrl", articleUrl);
-
-
 			
 		} catch (Exception e) {
 	         e.printStackTrace();
@@ -79,15 +69,24 @@ public class MainServlet extends MyServlet {
 		   	 
 		   	 try {
 
-		   		int num = Integer.parseInt(req.getParameter("num"));
+		   		int product_Num = Integer.parseInt(req.getParameter("product_Num"));
 		   		
 		   		// 게시물 가져오기
-		   		MainDTO dto = dao.readProduct(num);
+		   		MainDTO dto = dao.readProduct(product_Num);
 		   		
-		   		List<MainDTO> PhotoList = dao.readPhotoFile(num);
+		   		// 사진 가져오기
+		   		List<MainDTO> listImg = dao.readPhotoFile(product_Num);
+		   		
+		   		
+		   		int dataCount = 0;
+		   		dataCount = dao.dataCount();
+		   		
+		   		MainDTO Photo = dao.first_Image(1, dataCount, product_Num);
 		   		
 		   		req.setAttribute("dto", dto);
-		   		req.setAttribute("PhotoList", PhotoList);
+		   		req.setAttribute("Photo", Photo);
+		   		req.setAttribute("listImg", listImg);
+
 						   		
 			} catch (Exception e) {
 				e.printStackTrace();

@@ -72,12 +72,67 @@ public class MainDAO {
 		return newList;
 	}
 	
-	public List<MainDTO> userItemList() {
-		List<MainDTO> userItemList = new ArrayList<MainDTO>();
-		return userItemList;
+	// 상품에서 1장만 사진 뽑아오기
+	public MainDTO first_Image(int start, int end, int product_Num) {
+		MainDTO dto=null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+
+		try {
+			sql = "SELECT * FROM ( "
+				+ " 	SELECT ROWNUM rnum, tb.* FROM ( "
+				+ "  		SELECT p.product_Num, product_Name, product_Info, image_Num, image_Name, product_Price, "
+				+ "   			   TO_CHAR(product_Date,'YYYY-MM-DD')product_Date "	
+				+ "  		FROM product p  LEFT OUTER JOIN ( "
+				+ "     					SELECT image_Num, image_Name, product_num"
+				+ "  						FROM ( SELECT image_Num, image_Name, product_num, "
+				+ "  						 		ROW_NUMBER() OVER(PARTITION BY product_num ORDER BY image_Num ASC) rank "
+				+ "   								 FROM productimage)"
+				+ "							WHERE rank =1) "
+				+ "			i on p.product_num = i.product_num "
+				+ " 		WHERE p.product_Num = ?	"
+				+ "			ORDER BY product_date DESC "
+				+ "		) tb WHERE ROWNUM <= 8  "
+				+ ") WHERE rnum >= 1 ";
+				
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, product_Num);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				dto = new MainDTO();
+				dto.setProduct_Num(rs.getInt("product_Num"));
+				dto.setProduct_Name(rs.getString("product_Name"));
+				dto.setProduct_Price(rs.getInt("product_Price"));
+				dto.setProduct_Info(rs.getString("product_Info"));
+				dto.setProduct_Date(rs.getString("product_Date"));
+				dto.setImage_Num(rs.getInt("image_Num")); 
+				dto.setImage_Name(rs.getString("image_Name"));				
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+				
+			}
+		}
+		
+		return dto;
 	}
 	
-	public MainDTO readProduct(int num) {
+	public MainDTO readProduct(int product_Num) {
 		MainDTO dto = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -89,7 +144,7 @@ public class MainDAO {
 			
 			pstmt = conn.prepareStatement(sql);
 			
-			pstmt.setInt(1, num);
+			pstmt.setInt(1, product_Num);
 			
 			rs = pstmt.executeQuery();
 			
@@ -124,7 +179,7 @@ public class MainDAO {
 		return dto;
 	}
 	
-	public List<MainDTO> readPhotoFile(int num) {
+	public List<MainDTO> readPhotoFile(int product_Num) {
 		List<MainDTO> list = new ArrayList<>();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -133,7 +188,7 @@ public class MainDAO {
 		try {
 			sql  = "SELECT product_Num,image_Name, image_Num FROM productImage WHERE product_Num = ? ";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, num);
+			pstmt.setInt(1, product_Num);
 			rs = pstmt.executeQuery();
 			
 			while ( rs.next() ) {
@@ -216,7 +271,43 @@ public class MainDAO {
 		
 	}
 	
-	
+	// 데이터 개수세기
+	public int dataCount() {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		
+		try {
+			sql = "SELECT COUNT(*) FROM product";
+			pstmt = conn.prepareStatement(sql);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				result = rs.getInt(1);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+			
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+		
+		return result;
+	}
 
 	
 }
