@@ -3,6 +3,7 @@ package com.main;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,5 +76,147 @@ public class MainDAO {
 		List<MainDTO> userItemList = new ArrayList<MainDTO>();
 		return userItemList;
 	}
+	
+	public MainDTO readProduct(int num) {
+		MainDTO dto = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		
+		try {
+			sql = "SELECT  product_Num, product_Name, product_Info, product_Price "
+					+ " FROM product WHERE product_Num = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, num);
+			
+			rs = pstmt.executeQuery();
+			
+			if (rs.next()) {
+				dto = new MainDTO();
+				
+				dto.setProduct_Num(rs.getInt("product_Num"));
+				dto.setProduct_Name(rs.getString("product_Name"));
+				dto.setProduct_Info(rs.getString("product_Info"));
+				dto.setProduct_Price(rs.getInt("product_Price"));				
+				
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e2) {
+				}
+			}
 
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e2) {
+				}
+			}
+		}
+		
+		return dto;
+	}
+	
+	public List<MainDTO> readPhotoFile(int num) {
+		List<MainDTO> list = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		
+		try {
+			sql  = "SELECT product_Num,image_Name, image_Num FROM productImage WHERE product_Num = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			rs = pstmt.executeQuery();
+			
+			while ( rs.next() ) {
+				MainDTO dto = new MainDTO();
+				
+				dto.setProduct_Num(rs.getInt("product_Num"));
+				dto.setImage_Name(rs.getString("image_Name"));
+				dto.setImage_Num(rs.getInt("image_Num"));
+				
+				list.add(dto);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e2) {
+				}
+			}
+
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e2) {
+				}
+			}
+		}
+
+		return list;
+	}
+	
+	public void product_order(ProductOrderDTO dto) throws SQLException {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		
+		try {
+			sql = "INSERT INTO Order1( order_Num, order_Price, order_Date, user_Id) "
+					+ " VALUES ( order1_seq.NEXTVAL , ?, SYSDATE, ? )";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, dto.getOrder_Price());
+			pstmt.setString(2, dto.getUser_Id());
+			
+			pstmt.executeUpdate();
+			
+			pstmt.close();
+			pstmt = null;
+			
+			
+			sql = "INSERT INTO OrderDetail (order_Num, product_Num, orderDetail_Quant, orderDetail_Price, orderDetail_Date)"
+					+ " VALUES ( order1_seq.CURRVAL, ?, ?, ?, SYSDATE) ";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, dto.getProduct_Num());
+			pstmt.setInt(2, dto.getOrderDetail_Quant());
+			pstmt.setInt(3, dto.getOrderDetail_Price());
+
+			pstmt.executeUpdate();
+
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e2) {
+				}
+			}
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e2) {
+				}
+			}
+		}
+		
+	}
+	
+	
+
+	
 }
