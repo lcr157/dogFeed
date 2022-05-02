@@ -38,7 +38,7 @@
 							<!-- Product image-->
 							<c:choose>
 								<c:when test="${not empty dto.image_Name}">
-									<img class="card-img-top" src="${pageContext.request.contextPath}/uploads/product/${dto.image_Name}">
+									<img class="card-img-top" src="${pageContext.request.contextPath}/uploads/management/${dto.image_Name}">
 								</c:when>
 								<c:otherwise>
 									<img class="card-img-top" src="${pageContext.request.contextPath}/resource/img/noimage.png">
@@ -57,7 +57,7 @@
 							<!-- Product actions-->
 							<div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
 								<div class="text-center">
-									<a class="btn btn-outline-dark mt-auto" href="#">구매하기</a>
+									<a class="btn btn-outline-dark mt-auto" href="${articleUrl}&product_Num=${dto.product_Num}&bUri=${bUri}">상세정보</a>
 								</div>
 							</div>
 							
