@@ -245,6 +245,152 @@ public class MemberDAO {
 
 	}
 	
+	// 데이터 개수
+	public int dataCount() {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+
+		try {
+			sql = "SELECT NVL(COUNT(*), 0) FROM member";
+			pstmt = conn.prepareStatement(sql);
+
+			rs = pstmt.executeQuery();
+			
+			if (rs.next()) {
+				result = rs.getInt(1);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+				}
+			}
+
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
+
+		return result;
+	}
+
+	// 검색에서의 데이터 개수
+	public List<MemberDTO> dataCount(String condition, String keyword) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		System.out.println("dataCount log");
+		System.out.println(condition);
+		System.out.println(keyword);
+
+		List<MemberDTO> memberList=new ArrayList<MemberDTO>();
+		
+
+		try {
+//			sql = "SELECT NVL(COUNT(*), 0) FROM member ON user_Id";
+//			if (condition.equals("all")) {
+//				sql += "  WHERE INSTR(subject, ?) >= 1 OR INSTR(content, ?) >= 1 ";
+//			} else {
+//				sql += "  WHERE INSTR(" + condition + ", ?) >= 1 ";
+//			}
+			sql="select * "
+				+ "from member "
+			   + "where 1=1 ";
+			
+			
+			
+			if (condition.equals("user_Id")) {
+//				sql += " and user_Id like %?%";
+				sql += (" and user_Id like "+"'"+"%"+"'"+"?"+"'"+"%"+"'");
+			} else if (condition.equals("user_Name")){
+				sql += " and user_Name like ?";
+			} else if (condition.equals("user_Email")) {
+				sql += " and user_Email like ?";
+			} else if (condition.equals("user_Tel")) {
+				sql += " and user_Tel like ?";
+			} else {
+				//all 일때
+				sql += "and (user_Id like ?"
+						+ " or user_Name like ?"
+						+ " or user_Email like ?"
+						+ " or user_Tel like ?)";
+				
+			}
+
+			pstmt = conn.prepareStatement(sql);
+
+	//		pstmt = conn.prepareStatement(sb.toString());
+			
+			pstmt.setString(1, keyword);
+			if (condition.equals("all")) {
+				pstmt.setString(2, "%" + keyword + "%");
+				pstmt.setString(3, "%" + keyword + "%");
+				pstmt.setString(4, "%" + keyword + "%");
+			}
+
+			rs = pstmt.executeQuery();
+			
+//			if (rs.next()) {
+//				//result = rs.getString(1);
+//				System.out.println(rs.getString(1));
+//				
+//			}
+//			
+			
+			
+				
+				while(rs.next()) {
+					MemberDTO member = new MemberDTO();
+					member.setUser_Id(rs.getString("user_Id"));
+					member.setUser_Pwd(rs.getString("user_Pwd"));
+					member.setUser_Name(rs.getString("user_Name"));
+					member.setUser_Birth(rs.getString("user_Birth"));
+					member.setUser_Email1(rs.getString("user_Email"));
+					member.setTel(rs.getString("user_Tel"));
+					member.setUser_Address1(rs.getString("user_Address1"));
+					member.setUser_Address2(rs.getString("user_Address2"));
+					member.setUser_Role(rs.getInt("user_Role"));
+					member.setJoinDate(rs.getDate("join_date"));
+					member.setLastLogin(rs.getDate("last_login"));
+					System.out.println("값 : "+member.getTel());
+					memberList.add(member);
+				}
+			
+
+				System.out.println(memberList.toString());
+			
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+				}
+			}
+
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
+
+		return memberList;
+	}
+	
 	// MEMBER테이블에 저장된 모든 회원목록을 검색하여 반환하는 메소드
 	public List<MemberDTO> selectAllMember() throws SQLException {
 		Connection con=null;

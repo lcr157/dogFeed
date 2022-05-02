@@ -14,7 +14,8 @@ public class MemberDTO {
 	private int user_Role;
 	private Date joinDate;
 	private Date lastLogin;
-	
+
+
 	public MemberDTO() {
 		// TODO Auto-generated constructor stub
 	}

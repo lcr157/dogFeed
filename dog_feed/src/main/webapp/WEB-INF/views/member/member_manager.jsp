@@ -5,10 +5,6 @@
 <%@ page trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%
-	// MEMBEFR테이블에 저장된 회원목록을 검색하여 반환하는 DAO클래스 메소드
-	List<MemberDTO> memberList=MemberDAO.getDAO().selectAllMember();
-%>
 
 
 <style type="text/css">
@@ -73,6 +69,32 @@ th {
     color: white;
 }
 
+.table1-list thead > tr:first-child{
+	background: #f8f8f8;
+}
+.table1-list th, .table-list td {
+	text-align: center;
+}
+.table1-list .left {
+	text-align: left; padding-left: 5px; 
+}
+
+.table1-list .num {
+	width: 60px; color: #787878;
+}
+.table1-list .subject {
+	color: #787878;
+}
+.table1-list .name {
+	width: 100px; color: #787878;
+}
+.table1-list .date {
+	width: 100px; color: #787878;
+}
+.table1-list .hit {
+	width: 70px; color: #787878;
+}
+
 </style>
 
 <script src="http://code.jquery.com/jquery-latest.js"></script> 
@@ -80,58 +102,86 @@ th {
 
 <h2>* 회원목록 *</h2>
 <%-- 값을 전달하기 위해 form 태그 사용 --%>
-<form name="memberForm" id="memberForm">
-	<table>
-		<tr>
-			<!-- <th><input type="checkbox" id="allCheck"></th> -->
-			<th>직급</th>
-			<th>아이디</th>
-			<th>이름</th>
-			<th>이메일</th>
-			<th>전화번호</th>
-			<th>주소</th>
-			<th>가입일</th>
-			<th>최근접속</th>
-			<th>회원삭제</th>
-		</tr>
-		<%-- 검색값을 출력하기위해 일괄처리사용 --%>
-		<%for(MemberDTO member:memberList) {%>
-		<tr>
-			<td>
-				<%if(member.getUser_Role()==1){%> 
-				관리자
-				 <%} else { %> 
-				 <%-- 체크박스에 체크된경우 name변수로 value(체크된 회원의 ID)가 넘어감 : 고유값을 사용--%>
-				<%-- <input type="checkbox" class="check" name="checkUser_Id" value="<%=member.getUser_Id()%>">  --%>
-				회원
-				<%} %>
-			</td>	
-			<td class="member_user_Id"><%=member.getUser_Id() %></td>
-			<td class="member_user_Name"><%=member.getUser_Name() %></td>
-			<td class="member_user_Email"><%=member.getUser_Email1() %></td>
-			<td class="member_user_Tel"><%=member.getTel() %></td>
-			<td class="member_user_Address1"><%=member.getUser_Address1() %> <%=member.getUser_Address2() %></td>
-			<td class="member_user_Address2">
-				<%if(member.getJoinDate()!=null) {%> <%=String.valueOf(member.getJoinDate()) %> <%} %>
-			</td>
-			<td class="member_login">
-				<%if(member.getLastLogin()!=null) {%> <%=String.valueOf(member.getLastLogin()) %> <%} %></td>
-		<td>
-			<%if(member.getUser_Role()==1){%>
-			<%} else { %>
-			<button type="button" class="w-btn w-btn-green2" id="removeBtn" onclick="delete_ok('<%=member.getUser_Id() %>')">회원삭제</button>
-			<%} %>
-		</td>
-	</tr>
-		<%} %>
 
+		<table class="table">
+			<tr>
+				<!-- <th><input type="checkbox" id="allCheck"></th> -->
+				<th>직급</th>
+				<th>아이디</th>
+				<th>이름</th>
+				<th>이메일</th>
+				<th>전화번호</th>
+				<th>주소1</th>
+				<th>주소2</th>
+				<th>가입일</th>
+				<th>최근접속</th>
+				<th>회원삭제</th>
+			</tr>
+
+			<c:forEach var="dto" items="${list}">
+				<tr>
+					<td>
+						<c:if test="${dto.user_Role eq  '1'}">
+							관리자
+						</c:if>
+						
+						<c:if test="${dto.user_Role eq  '0'}">
+							회원
+						</c:if>
+				    </td>	
+					<td>${dto.user_Id}</td>
+					<td>${dto.user_Name}</td>
+					<td>${dto.user_Email1}${dto.user_Email2}${dto.user_Email3}</td>
+					<td>${dto.tel}</td>
+					<td>${dto.user_Address1}</td>
+					<td>${dto.user_Address2}</td>
+					<td>${dto.joinDate}</td>
+					<td>${dto.lastLogin}</td>
+					<td>
+						<c:if test="${dto.user_Role eq  '1'}">
+						
+						</c:if>
+						<c:if test="${dto.user_Role eq  '0'}">
+						<button type="button" class="w-btn w-btn-green2" id="removeBtn" onclick="delete_ok('${dto.user_Id}')">회원삭제</button>
+						</c:if>
+					</td>
+					
+				
+				
+		   </tr>
+		   </c:forEach>	
+	<br>
 	</table>
-	<!-- <p>
-		<button type="button" id="removeBtn">선택회원삭제</button>
-	</p> -->
-	<div id="message" style="color: red;"></div>
-</form>
+	<p>	
+		<form name="searchForm" action="${pageContext.request.contextPath}/member/list.do" method="post">
+		<table class="table">
+			<tr>
+				<td width="100">
+					<button class="btn" type="button" onclick="location.href='${pageContext.request.contextPath}/member/member_manager.do';">새로고침</button>
+				</td>
+				<td align="center">
+						<select name="condition" class="form-select">
+							<option value="all" ${condition=="all"?"selected='selected'":"" }>전체</option>
+							<option value="user_Name" ${condition=="user_Name"?"selected='selected'":"" }>이름</option>
+							<option value="user_Email"  ${condition=="user_Email"?"selected='selected'":"" }>이메일</option>
+							<option value="user_Tel"  ${condition=="user_Tel"?"selected='selected'":"" }>전화번호</option>
+						</select>
+						<input type="text" name="keyword" value="${keyword}" class="form-control">
+						<button type="button" class="btn" onclick="searchList();">검색</button>
+				</td>
+			</tr>
+		</table>	
+	</form>
+	</p>
+		<!-- <p>
+			<button type="button" id="removeBtn">선택회원삭제</button>
+		</p> -->
+		<div id="message" style="color: red;"></div>
 
+
+		
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
 function delete_ok(userId) {
 	
@@ -163,6 +213,11 @@ function delete_ok(userId) {
 		$(".check").prop("checked", false);
 	}
 });
+
+function searchList() {
+		const f = document.searchForm;
+		f.submit();
+}
 
 /* 삭제버튼기능 */
 // $("#removeBtn").click(function() {

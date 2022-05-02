@@ -1,8 +1,12 @@
 package com.member;
 
 import java.io.IOException;
+
 import java.io.PrintWriter;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,6 +17,7 @@ import javax.servlet.http.HttpSession;
 import org.json.JSONObject;
 
 import com.util.MyServlet;
+import com.util.MyUtil;
 
 @WebServlet("/member/*")
 public class MemberServlet extends MyServlet {
@@ -45,9 +50,22 @@ public class MemberServlet extends MyServlet {
 		} else if (uri.indexOf("userIdCheck.do") != -1) {
 			userIdCheck(req, resp);
 		} else if (uri.indexOf("member_manager.do") != -1) {
-			memberManagerForm(req, resp);
+			try {
+				memberManagerForm(req, resp);
+			} catch (ServletException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} else if (uri.indexOf("memberDeleteOk.do") != -1) {
 			memberDeleteSubmit(req, resp);
+		} else if (uri.indexOf("list.do") != -1) {
+			list(req, resp);
 		}
 	}
 	
@@ -376,7 +394,7 @@ public class MemberServlet extends MyServlet {
 		out.print(job.toString());
 	}
 	
-	private void memberManagerForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	private void memberManagerForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, SQLException {
 		MemberDAO dao = new MemberDAO();
 		HttpSession session = req.getSession();
 		SessionInfo info = (SessionInfo) session.getAttribute("member");
@@ -407,12 +425,60 @@ public class MemberServlet extends MyServlet {
 
 			dto.setUser_Address1(req.getParameter("user_Address1"));
 			dto.setUser_Address2(req.getParameter("user_Address2"));
+			
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		List<MemberDTO> list= dao.selectAllMember();
+		req.setAttribute("list", list);
 
+		forward(req, resp, "/WEB-INF/views/member/member_manager.jsp");
+	}
+	
+	private void list(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// 게시물 리스트
+		MemberDAO dao = new MemberDAO();
+		MyUtil util = new MyUtil();
+
+		String cp = req.getContextPath();
+		
+		try {
+			
+			// 검색
+			String condition = req.getParameter("condition");
+			String keyword = req.getParameter("keyword");
+			if (condition == null) {
+				condition = "all";
+				keyword = "";
+			}
+
+			// GET 방식인 경우 디코딩
+			if (req.getMethod().equalsIgnoreCase("GET")) {
+				keyword = URLDecoder.decode(keyword, "utf-8");
+			}
+
+			// 전체 데이터 개수
+			List<MemberDTO> dlist = null;
+			if (keyword.length() == 0) {
+				//dlist = dao.dataCount();
+			} else {
+				dlist = dao.dataCount(condition, keyword);
+			}
+			
+			// 포워딩할 JSP에 전달할 속성
+			req.setAttribute("list", dlist);
+			req.setAttribute("condition", condition);
+			req.setAttribute("keyword", keyword);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
+		System.out.println("?");
+		// JSP로 포워딩
 		forward(req, resp, "/WEB-INF/views/member/member_manager.jsp");
 	}
 	
