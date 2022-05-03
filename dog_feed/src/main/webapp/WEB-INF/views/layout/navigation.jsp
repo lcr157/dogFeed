@@ -35,7 +35,7 @@
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">마이페이지</a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="${pageContext.request.contextPath}/order/order.do">구매내역</a></li>
-                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/account/account.do">가게부</a></li>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/account/account.do">가계부</a></li>
                     </ul>
                 </li>
                 </c:if>

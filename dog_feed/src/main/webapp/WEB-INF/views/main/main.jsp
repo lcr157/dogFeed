@@ -15,6 +15,12 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
 <!-- Core theme CSS (includes Bootstrap)-->
 <link href="${pageContext.request.contextPath}/resource/css/styles.css" rel="stylesheet" type="text/css"/>
+<style type="text/css">
+.card-img-top {
+	height: 200px;
+}
+</style>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script type="text/javascript">
@@ -30,8 +36,6 @@ $(function(){
 		let productPrice = data.productPrice;
 		
 		
-		console.log(productNum, productName, productImg);
-
 		let p;
 		p  = '<div class="col mb-5">';
 		p += '   <div class="card h-100" ">';
@@ -174,7 +178,7 @@ $(function(){
 		<div class="container px-4 px-lg-5 mt-5">
 			<p style="font-weight: bold; font-size: 30px;"> 최근 본 상품 </p>
 			<div
-				class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center todayList">
+				class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 todayList">
 				
 								
 				
