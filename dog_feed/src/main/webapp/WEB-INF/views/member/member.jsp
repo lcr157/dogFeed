@@ -1,4 +1,5 @@
-﻿<%@ page contentType="text/html; charset=UTF-8" %>
+﻿
+<%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -20,7 +21,6 @@
 
 <style>
 .visual{ height:1000px; border:1px solid red; }
-
 .table-form td {
 	padding: 7px 0;
 }
@@ -36,20 +36,15 @@
 .table-form tr td:nth-child(2) {
 	text-align: left; padding-left: 10px; 
 }
-
 .table-form input[type=text]:focus, .table-form input[type=date]:focus, .table-form input[type=password]:focus {
 	border: 1px solid #222;
 }
-
 .help-block, .block {
 	margin-top: 5px;
 }
 .msg-box {
 	text-align: center; color: blue;
 }
-
-
-
       div.container{
     }
  
@@ -180,7 +175,6 @@
 	background: #eee;
 	z-index: 2;
 }
-
 .black_bg {
 	display: none;
 	position: absolute;
@@ -192,7 +186,6 @@
 	left: 0;
 	z-index: 1;
 }
-
 .modal_close {
 	width: 26px;
 	height: 26px;
@@ -200,7 +193,6 @@
 	top: -30px;
 	right: 0;
 }
-
 .modal_close>a {
 	display: block;
 	width: 100%;
@@ -217,21 +209,18 @@
 function memberOk() {
 	const f = document.memberForm;
 	let str;
-
 	str = f.user_Id.value;
 	if( !/^[a-z][a-z0-9_]{4,9}$/i.test(str) ) { 
 		alert("아이디를 다시 입력 하세요. ");
 		f.user_Id.focus();
 		return;
 	}
-
 	str = f.user_Pwd.value;
 	if( !/^(?=.*[a-z])(?=.*[!@#$%^*+=-]|.*[0-9]).{5,10}$/i.test(str) ) { 
 		alert("패스워드를 다시 입력 하세요. ");
 		f.user_Pwd.focus();
 		return;
 	}
-
 	if( str !== f.user_Pwd2.value ) {
         alert("패스워드가 일치하지 않습니다. ");
         f.user_Pwd.focus();
@@ -244,7 +233,6 @@ function memberOk() {
         f.userName.focus();
         return;
     }
-
     str = f.user_Birth.value;
     if( !str ) {
         alert("생년월일를 입력하세요. ");
@@ -258,14 +246,12 @@ function memberOk() {
         f.tel1.focus();
         return;
     }
-
     str = f.tel2.value;
     if( !/^\d{3,4}$/.test(str) ) {
         alert("숫자만 가능합니다. ");
         f.tel2.focus();
         return;
     }
-
     str = f.tel3.value;
     if( !/^\d{4}$/.test(str) ) {
     	alert("숫자만 가능합니다. ");
@@ -279,18 +265,15 @@ function memberOk() {
         f.user_Email2.focus();
         return;
     }
-
     str = f.user_Email3.value.trim();
     if( !str ) {
         alert("이메일을 입력하세요. ");
         f.user_Email3.focus();
         return;
     }
-
    	f.action = "${pageContext.request.contextPath}/member/${mode}_ok.do";
     f.submit();
 }
-
 function changeEmail() {
     const f = document.memberForm;
 	    
@@ -307,7 +290,6 @@ function changeEmail() {
         f.user_Email2.focus();
     }
 }
-
 function next(){
 	 if(confirm("탈퇴하시려면 예를 누르시고 하지 않으시려면 아니오를 눌러주세요"))
 	 {
@@ -491,54 +473,9 @@ function userIdCheck() {
 					<td align="center">
 						<span>
 							<input type="checkbox" name="terms" value="1" checked="checked" onchange="form.btnOk.disabled = !checked">
-							약관에 동의하시겠습니까 ?
+							개인정보 수집 및 이용에 동의하시겠습니까 ?
 						</span>
-						<span><button type='button' id="modal_btn">약관동의</button>
-							  <div class="black_bg"></div>
-						      <div class="modal_wrap">
-    							
-    							<div class="modal_close"><a href="#">close</a></div>
-    							<div>
-    							<p>
- 제 1 조(목적)
 
-본 약관은 국가공간정보포털 웹사이트(이하 "국가공간정보포털")가 제공하는 모든 서비스(이하 "서비스")의 이용조건 및 절차, 회원과 국가공간정보포털의 권리, 의무, 책임사항과 기타 필요한 사항을 규정함을 목적으로 합니다.
-
-제 2 조(약관의 효력과 변경)
-
-1. 국가공간정보포털은 이용자가 본 약관 내용에 동의하는 경우, 국가공간정보포털의 서비스 제공 행위 및 회원의 서비스 사용 행위에 본 약관이 우선적으로 적용됩니다.
-2. 국가공간정보포털은 약관을 개정할 경우, 적용일자 및 개정사유를 명시하여 현행약관과 함께 국가공간정보포털의 초기화면에 그 적용일 7일 이전부터 적용 전일까지 공지합니다. 단, 회원에 불리하게 약관내용을 변경하는 경우에는 최소한 30일 이상의 사전 유예기간을 두고 공지합니다. 이 경우 국가공간정보포털은 개정 전 내용과 개정 후 내용을 명확하게 비교하여 회원이 알기 쉽도록 표시합니다.
-3. 변경된 약관은 국가공간정보포털 홈페이지에 공지하거나 e-mail을 통해 회원에게 공지하며, 약관의 부칙에 명시된 날부터 그 효력이 발생됩니다. 회원이 변경된 약관에 동의하지 않는 경우, 회원은 본인의 회원등록을 취소(회원탈퇴)할 수 있으며, 변경된 약관의 효력 발생일로부터 7일 이내에 거부의사를 표시하지 아니하고 서비스를 계속 사용할 경우는 약관 변경에 대한 동의로 간주됩니다.
-
-제 3 조(약관 외 준칙)
-
-본 약관에 명시되지 않은 사항은 전기통신기본법, 전기통신사업법, 정보통신윤리위원회심의규정, 정보통신 윤리강령, 프로그램보호법 및 기타 관련 법령의 규정에 의합니다.
-
-제 4 조(용어의 정의)
-
-본 약관에서 사용하는 용어의 정의는 다음과 같습니다.
-
-1. 이용자 : 본 약관에 따라 국가공간정보포털이 제공하는 서비스를 받는 자
-2. 가입 : 국가공간정보포털이 제공하는 신청서 양식에 해당 정보를 기입하고, 본 약관에 동의하여 서비스 이용계약을 완료시키는 행위
-3. 회원 : 국가공간정보포털에 개인 정보를 제공하여 회원 등록을 한 자로서 국가공간정보포털이 제공하는 서비스를 이용할 수 있는 자.
-4. 계정(ID) : 회원의 식별과 회원의 서비스 이용을 위하여 회원이 선정하고 국가공간정보포털에서 부여하는 문자와 숫자의 조합
-5. 비밀번호 : 회원과 계정이 일치하는지를 확인하고 통신상의 자신의 비밀보호를 위하여 회원 자신이 선정한 문자와 숫자의 조합
-6. 탈퇴 : 회원이 이용계약을 종료시키는 행위
-7. 본 약관에서 정의하지 않은 용어는 개별서비스에 대한 별도 약관 및 이용규정에서 정의합니다.
-
-제 2장 서비스 제공 및 이용
-
-제 5 조 (이용계약의 성립)
-
-1. 이용계약은 이용자가 온라인으로 국가공간정보포털에서 제공하는 소정의 가입신청 양식에서 요구하는 사항을 기록하여 가입을 완료하는 것으로 성립됩니다.
-2. 국가공간정보포털은 다음 각 호에 해당하는 이용계약에 대하여는 가입을 취소할 수 있습니다.
-   1) 다른 사람의 명의를 사용하여 신청하였을 때
-   2) 이용계약 신청서의 내용을 허위로 기재하였거나 신청하였을 때
-   3) 다른 사람의 국가공간정보포털 서비스 이용을 방해하거나 그 정보를 도용하는 등의 행위를 하였을 때
-   4) 국가공간정보포털을 이용하여 법령과 본 약관이 금지하는 행위를 하는 경우
-   5) 기타 국가공간정보포털이 정한 이용신청요건이 미비 되었을 때
-   
-</p>
 
 
     							</div>
@@ -584,20 +521,16 @@ function userIdCheck() {
         new daum.Postcode({
             oncomplete: function(data) {
                 // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
-
                 // 각 주소의 노출 규칙에 따라 주소를 조합한다.
                 // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
                 var fullAddr = ''; // 최종 주소 변수
                 var extraAddr = ''; // 조합형 주소 변수
-
                 // 사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
                 if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
                     fullAddr = data.roadAddress;
-
                 } else { // 사용자가 지번 주소를 선택했을 경우(J)
                     fullAddr = data.jibunAddress;
                 }
-
                 // 사용자가 선택한 주소가 도로명 타입일때 조합한다.
                 if(data.userSelectedType === 'R'){
                     //법정동명이 있을 경우 추가한다.
@@ -613,10 +546,8 @@ function userIdCheck() {
                     // 조합형주소의 유무에 따라 양쪽에 괄호를 추가하여 최종 주소를 만든다.
                     fullAddr += (extraAddr !== '' ? ' ('+ extraAddr +')' : '');
                 }
-
                
                 document.getElementById('addr1').value = fullAddr;
-
                 // 커서를 상세주소 필드로 이동한다.
                 document.getElementById('addr2').focus();
             }
@@ -642,7 +573,6 @@ function userIdCheck() {
        document.querySelector('.modal_close').addEventListener('click', offClick);
      
     };
-
 </script>
 
 </body> </html>
