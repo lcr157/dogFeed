@@ -1,7 +1,7 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8"%>
 <%@ page trimDirectiveWhitespaces="true" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,10 +11,14 @@
 <!-- Favicon-->
 <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
 <!-- Bootstrap icons-->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
+	rel="stylesheet" />
 <!-- Core theme CSS (includes Bootstrap)-->
-<link href="${pageContext.request.contextPath}/resource/css/styles.css" rel="stylesheet" type="text/css"/>
-<title>공지사항</title>
+<link href="${pageContext.request.contextPath}/resource/css/styles.css"
+	rel="stylesheet" type="text/css" />
+<title>Q&amp;A</title>
+<link rel="icon" href="data:;base64,iVBORw0KGgo=">
 <style type="text/css">
 .frame * {
 	margin: 0; padding: 0;
@@ -46,13 +50,12 @@
 	border-bottom: 2px solid;
 	border-top: 1px solid;
 }
-
 .table-subject .num{
 	width: 5%;
 }
 
 .table-subject .subject{
-	width: 60%;
+	width: 50%;
 }
 
 .table-subject .name{
@@ -63,8 +66,8 @@
 	width: 15%;
 }
 
-.table-subject .hit{
-	width: 10%;
+.table-subject .product{
+	width: 20%;
 }
 
 .table-content {
@@ -90,7 +93,6 @@
 	font-size: 20px;
 	font-weight: bold;
 }
-
 
 tr.table-content:not(:last-child) td{
 	border-bottom: 1px solid #eee;
@@ -186,27 +188,32 @@ tr.table-content:last-child td{
 	text-align: center;
 }
 
+#privacy {
+	color: #dbd;
+	font-weight: bold;
+}
 
 </style>
+
 <script type="text/javascript">
 function searchList() {
 	const f = document.searchForm;
 	f.submit();
 }
 </script>
+
 </head>
 <body>
-<header>
-	<jsp:include page="/WEB-INF/views/layout/navigation.jsp"></jsp:include>
-	<jsp:include page="/WEB-INF/views/layout/header.jsp"></jsp:include>
-</header>
-	
+	<header>
+		<jsp:include page="/WEB-INF/views/layout/navigation.jsp"></jsp:include>
+		<jsp:include page="/WEB-INF/views/layout/header.jsp"></jsp:include>
+	</header>
 
 <div class="frame">
 		<table>
 			<tr>
 				<td class="table-title">
-				<h2>공지사항</h2>
+				<h2>Q&amp;A</h2>
 				</td>
 			</tr>
 		</table>
@@ -219,26 +226,40 @@ function searchList() {
 			</tr>
 		</table>
 		
-		<table>
+		<table >
 				<tr class="table-subject">
 					<th class="num">번호</th>
 					<th class="subject">제목</th>
 					<th class="name">작성자</th>
 					<th class="date">작성일</th>
-					<th class="hit">조회수</th>
+					<th class="product">제품</th>
 				</tr>
+			
 			
 				<c:forEach var="dto" items="${list}">
 					<tr class="table-content">
 						<td class="num">${dto.listNum}</td>
 						<td class="subject">
-							<a href="${articleUrl}&notice_Num=${dto.notice_Num}">${dto.notice_Subject}</a>
+							<c:forEach var="n" begin="1" end="${dto.qna_Depth }">&nbsp;&nbsp;</c:forEach>
+							<c:if test="${dto.qna_Depth!=0}">└&nbsp;</c:if>
+							<c:choose>
+								<c:when test="${dto.qna_Privacy==0}">
+									<a href="${articleUrl}&qna_Num=${dto.qna_Num}">${dto.qna_Subject}</a>
+								</c:when>
+								<c:when test="${sessionScope.member.userId == dto.user_Id || sessionScope.member.userId == 'admin' }">
+									<a href="${articleUrl}&qna_Num=${dto.qna_Num}">${dto.qna_Subject} <span id="privacy">[비공개]</span></a>
+								</c:when>
+								<c:otherwise>
+									${dto.qna_Subject}<span id="privacy">[비공개]</span>
+								</c:otherwise>
+							</c:choose>
 						</td>
 						<td class="name">${dto.user_Name}</td>
-						<td class="date">${dto.notice_Date}</td>
-						<td class="hit">${dto.notice_Hits}</td>
+						<td class="date">${dto.qna_Date}</td>
+						<td class="product">${dto.product_Name}</td>
 					</tr>
 				</c:forEach>
+			
 		</table>
 		
 		<table>
@@ -254,31 +275,31 @@ function searchList() {
 		<table class="class-btn">
 			<tr>
 				<td class="left">
-					<button type="button" class="bt" onclick="location.href='${pageContext.request.contextPath}/notice/list.do';">초기화</button>
+					<button type="button" class="bt" onclick="location.href='${pageContext.request.contextPath}/qna/list.do';">새로고침</button>
 				</td>
-				<td class="center">
-					<form name="searchForm" action="${pageContext.request.contextPath}/notice/list.do" method="post">
+				<td align="center">
+					<form name="searchForm" action="${pageContext.request.contextPath}/qna/list.do" method="post">
 						<select class="sch" name="condition">
 							<option value="all"      ${condition=="all"?"selected='selected'":"" }>제목+내용</option>
 							<option value="user_Name" ${condition=="user_Name"?"selected='selected'":"" }>작성자</option>
-							<option value="notice_Date"  ${condition=="notice_Date"?"selected='selected'":"" }>등록일</option>
-							<option value="notice_Subject"  ${condition=="notice_Subject"?"selected='selected'":"" }>제목</option>
-							<option value="notice_Content"  ${condition=="notice_Content"?"selected='selected'":"" }>내용</option>
+							<option value="qna_Subject"  ${condition=="qna_Subject"?"selected='selected'":"" }>제목</option>
+							<option value="qna_Content"  ${condition=="qna_Content"?"selected='selected'":"" }>내용</option>
 						</select><input type="text" class="sch" name="keyword" value="${keyword}"><button type="button" class="sch" onclick="searchList();">검색</button>
 					</form>
 				</td>
-				<td class="right">
-				<c:if test="${sessionScope.member.userId=='admin'}">
-					<button type="button" class="bt" onclick="location.href='${pageContext.request.contextPath}/notice/write.do';">글올리기</button>
-				</c:if>
+				<td align="right">
+					<button type="button" class="bt" onclick="location.href='${pageContext.request.contextPath}/qna/write.do';">글올리기</button>
 				</td>
 			</tr>
 		</table>	
-</div>
+
+	</div>
 
 
-<footer>
-    <jsp:include page="/WEB-INF/views/layout/footer.jsp"></jsp:include>
-</footer>
+
+
+	<footer>
+		<jsp:include page="/WEB-INF/views/layout/footer.jsp"></jsp:include>
+	</footer>
 </body>
 </html>
