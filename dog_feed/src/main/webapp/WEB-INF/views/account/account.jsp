@@ -117,8 +117,7 @@ function searchList() {
 		return;
 	}
 	
-	alert("성공...");
-	
+	f.submit();
 }
 
 // 날짜를 문자열로
@@ -231,7 +230,7 @@ function updateAccount(num) {
 				<h3><i class="fas fa-chalkboard-teacher"></i> 가계부 </h3>
 		</div>
 		
-		<form name="searchForm" style="margin: 10px auto;">
+		<form name="searchForm" style="margin: 10px auto;" method="post" action="${pageContext.request.contextPath}/account/account.do">
 	       <button type="button" class="btn" onclick="settingsInput('day', 0);">오늘</button>
 	       <button type="button" class="btn" onclick="settingsInput('week', 1);">1주일</button>
 	       <button type="button" class="btn" onclick="settingsInput('month', 1);">1개월</button>
@@ -249,6 +248,9 @@ function updateAccount(num) {
    		
    		<table class="table">
 			<tr>
+				<td align="left">
+					<button type="button" class="btn" onclick="location.href='${pageContext.request.contextPath}/account/account.do';">전체리스트</button>
+				</td>
 				<td align="right">
 					<button type="button" class="btn" onclick="location.href='${pageContext.request.contextPath}/account/write.do';">등록하기</button>
 				</td>

@@ -146,7 +146,7 @@ public class AccountDAO {
 		return result;
 	}
 	
-	public List<AccountDTO> listAccount(String id) {
+	public List<AccountDTO> listAccount(String id,  String startDate, String endDate) {
 		// 전체 리스트
 		List<AccountDTO> accountList = new ArrayList<AccountDTO>();
 		PreparedStatement pstmt = null;
@@ -154,11 +154,19 @@ public class AccountDAO {
 		String sql;
 		
 		try {
-			sql = "SELECT accountBook_Num, user_Id, TO_CHAR(accountBook_Date, 'YYYY-MM-DD') accountBook_Date, content, amount, NVL(memo, '-') memo "
-				+ "FROM accountBook WHERE user_Id = ?";
+			sql = " SELECT accountBook_Num, user_Id, TO_CHAR(accountBook_Date, 'YYYY-MM-DD') accountBook_Date, content, amount, NVL(memo, '-') memo "
+				+ " FROM accountBook WHERE ( user_Id = ? ) ";
+			if(startDate.length() != 0 && endDate.length() != 0) {
+				sql += " AND (accountBook_Date >= ? AND  accountBook_Date <= ? ) ";
+			}
 			
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, id);
+			if(startDate.length() != 0 && endDate.length() != 0) {
+				pstmt.setString(2, startDate);
+				pstmt.setString(3, endDate);
+			}
+			
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
