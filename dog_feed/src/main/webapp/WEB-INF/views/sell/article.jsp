@@ -62,16 +62,14 @@ a:hover {
 	flex-direction: row; 
 	flex-wrap: nowrap;
 	overflow-x: auto;
-	display: table-cell;
+	display: block;
     vertical-align: inherit;
 }
 
 .img-box img {
 	width: 500px;
 	height: 500px;
-	margin-right: 5px;
-	flex: 0 0 auto;
-	cursor: pointer;
+	margin-left: 15px;
 }
 
 .btn {
@@ -134,7 +132,7 @@ a:hover {
 				
 				<tr style="border-bottom: none;">
 					<td colspan="2" height="110" style="font-size:18px; font-weight: bold;">
-					${dto.product_Info}
+					< ${dto.product_Info} >
 						<div class="img-box" style="border= none;">
 							<c:forEach var="vo" items="${listImage}">
 								<img src="${pageContext.request.contextPath}/uploads/management/${vo.image_Name}">
