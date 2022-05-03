@@ -18,6 +18,7 @@
 <style type="text/css">
 .card-img-top {
 	height: 256px;
+	
 }
 </style>
 

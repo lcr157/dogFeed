@@ -260,7 +260,7 @@ input[type=checkbox], input[type=radio] {
 }
 
 .explanation {
-text-align: center;
+	text-align: center;
     font-size: 25px;
     color: balck;
     font-weight: 550;
