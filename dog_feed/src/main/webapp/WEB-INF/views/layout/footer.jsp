@@ -6,7 +6,8 @@
  <!-- Footer-->
 <footer class="py-5 bg-dark">
     <div class="container">
-    	<p class="m-0 text-center text-white">Copyright &copy; 웹이름</p>
+		<p class="m-0 text-center text-white">[김수인 김산 노소영 남재희 유화영 임채룡]</p>
+		
     	
     </div>
 

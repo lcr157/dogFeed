@@ -6,7 +6,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
-
 <style type="text/css">
 table {
 	margin: 0 auto;
@@ -97,12 +96,13 @@ th {
 
 </style>
 
+
+
 <script src="http://code.jquery.com/jquery-latest.js"></script> 
 <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
 
 <h2>* 회원목록 *</h2>
 <%-- 값을 전달하기 위해 form 태그 사용 --%>
-
 		<table class="table">
 			<tr>
 				<!-- <th><input type="checkbox" id="allCheck"></th> -->

@@ -7,7 +7,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
+<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+<!-- Favicon-->
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+<!-- Bootstrap icons-->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+<!-- Core theme CSS (includes Bootstrap)-->
+<link href="${pageContext.request.contextPath}/resource/css/styles.css" rel="stylesheet" type="text/css"/>
+<!-- admin css가져오기 -->
+<link href="${pageContext.request.contextPath}/resource/css/admin.css" rel="stylesheet" type="text/css"/>
 <title>${title}</title>
 
 <style>
@@ -354,7 +362,12 @@ function userIdCheck() {
 </head>
 
 <body>
-
+	<!-- navigation -->
+	<jsp:include page="/WEB-INF/views/layout/navigation.jsp"></jsp:include>
+	<!-- Header-->
+	<header>
+		<jsp:include page="/WEB-INF/views/layout/header.jsp"></jsp:include>
+	</header>
 <main>
     <div class="body-container">
         <div class="body-title">
@@ -558,8 +571,11 @@ function userIdCheck() {
 			</tr>
 		</table>
 		</form>
-      
+    <footer>
+		<jsp:include page="/WEB-INF/views/layout/footer.jsp"></jsp:include>
+	</footer>
     </div>
+
 </main>
 
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
