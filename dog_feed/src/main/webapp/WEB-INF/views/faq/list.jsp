@@ -235,9 +235,9 @@ function searchList() {
 		});
 	});
 	
-function deleteFaq() {
+function deleteFaq(faq_Num) {
 	    if(confirm("게시글을 삭제 하시 겠습니까 ? ")) {
-		    let query = "faq_Num=${dto.faq_Num}&${query}&page=${page}";
+		    let query = "faq_Num="+faq_Num+"&${query}&page=${page}";
 		    let url = "${pageContext.request.contextPath}/faq/delete.do?" + query;
 	    	location.href = url;
 	    }
@@ -326,7 +326,7 @@ $(function(){
 						<c:if test="${sessionScope.member.userId=='admin'}">
 						<br><br>
 							<button type="button" class="bt" onclick="location.href='${pageContext.request.contextPath}/faq/update.do?faq_Num=${dto.faq_Num}&page=${page}';">수정</button>
-							<button type="button" class="bt" onclick="deleteFaq();">삭제</button>
+							<button type="button" class="bt" onclick="deleteFaq('${dto.faq_Num}');">삭제</button>
 						</c:if>
 					</div>
 				</td>

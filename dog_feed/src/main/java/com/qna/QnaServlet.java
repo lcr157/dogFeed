@@ -365,6 +365,7 @@ public class QnaServlet extends MyServlet {
 			dto.setQna_Depth(Integer.parseInt(req.getParameter("qna_Depth")));
 			dto.setQna_Parent(Integer.parseInt(req.getParameter("qna_Parent")));
 			dto.setProduct_Num(Integer.parseInt(req.getParameter("product_Num")));
+			dto.setQna_Privacy(Integer.parseInt(req.getParameter("qna_Privacy")));
 			
 			
 			

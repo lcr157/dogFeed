@@ -168,6 +168,10 @@ function sendQna() {
 								<input type="hidden" name="product_Num" value="${dto.product_Num}">
 								${dto.product_Name}
 							</c:when>
+							<c:when test="${dto.qna_OrderNum > 0}">
+								<input type="hidden" name="product_Num" value="${dto.product_Num}">
+								${dto.product_Name}
+							</c:when>
 							<c:otherwise>
 									<select name="product_Num">
 										<option value="">제품을 선택해주세요.</option>

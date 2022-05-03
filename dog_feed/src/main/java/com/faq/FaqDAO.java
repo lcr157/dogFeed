@@ -379,7 +379,15 @@ public class FaqDAO {
 				pstmt.setInt(1, num);
 				
 				pstmt.executeUpdate();
+			} else {
+				sql = "DELETE FROM Faq WHERE faq_Num=? AND user_Id=?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, num);
+				pstmt.setString(2, userId);
+				
+				pstmt.executeUpdate();
 			}
+			
 
 		} catch (SQLException e) {
 			e.printStackTrace();
