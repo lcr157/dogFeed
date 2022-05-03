@@ -185,5 +185,4 @@ $(function(){
 	<footer>
 		<jsp:include page="/WEB-INF/views/layout/footer.jsp"></jsp:include>
 	</footer>
-		
 </body> </html>
