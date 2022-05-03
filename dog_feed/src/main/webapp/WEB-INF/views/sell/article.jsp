@@ -107,7 +107,6 @@ a:hover {
 <main>
 	<h3>${dto.product_Name}</h3>
 		<p></p>
-		
 		<table class="table table-form">
 			
 				<tr>

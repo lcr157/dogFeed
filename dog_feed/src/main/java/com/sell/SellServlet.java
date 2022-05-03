@@ -33,7 +33,6 @@ public class SellServlet extends MyServlet {
 		} 
 	}
 	
-	// http://localhost:9090/dog_feed/sell/list.do
 	private void list(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		SellDAO dao = new SellDAO();
 		MyUtil util = new MyUtil();
