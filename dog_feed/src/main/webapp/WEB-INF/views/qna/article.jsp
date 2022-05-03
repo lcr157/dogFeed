@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
-<%@ page trimDirectiveWhitespaces="true"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ page trimDirectiveWhitespaces="true" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,7 +17,8 @@
 <!-- Core theme CSS (includes Bootstrap)-->
 <link href="${pageContext.request.contextPath}/resource/css/styles.css"
 	rel="stylesheet" type="text/css" />
-	<title>공지사항</title>
+<title>Q&amp;A</title>
+<link rel="icon" href="data:;base64,iVBORw0KGgo=">
 <style type="text/css">
 .frame * {
 	margin: 0; padding: 0;
@@ -73,17 +74,21 @@
 
 </style>
 <script type="text/javascript">
-	<c:if test="${sessionScope.member.userId=='admin'}">
-	function deleteNotice() {
-		if (confirm("공지사항을 삭제 하시 겠습니까 ? ")) {
-			let query = "notice_Num=${dto.notice_Num}&${query}";
-			let url = "${pageContext.request.contextPath}/notice/delete.do?"
-					+ query;
-			location.href = url;
-		}
-	}
-	</c:if>
+<c:if test="${sessionScope.member.userId==dto.user_Id || sessionScope.member.userId=='admin'}">
+function deleteQna() {
+    if(confirm("게시글을 삭제 하시 겠습니까 ? ")) {
+        let query = "qna_Num=${dto.qna_Num}&${query}";
+        let url = "${pageContext.request.contextPath}/qna/delete.do?" + query;
+    	location.href = url;
+    }
+}
+</c:if>
+
+
+
+
 </script>
+
 </head>
 <body>
 	<header>
@@ -92,11 +97,11 @@
 	</header>
 
 	<div class="frame">
-		<table>
+<table>
 			<tr>
 				<td class="table-title">
 					<div>
-						<h2>공지사항</h2>
+						<h2>Q&amp;A</h2>
 					</div>
 				</td>
 			</tr>
@@ -104,36 +109,44 @@
 
 		<table class="table-content">
 			<tr>
-				<td align="center">${dto.notice_Subject}</td>
+				<td align="center"><c:if test="${dto.qna_Depth!=0 }">[Re] </c:if>${dto.qna_Subject}</td>
 			</tr>
 
 			<tr>
-				<td align="center">작성일 ${dto.notice_Date} &nbsp;|&nbsp; 작성자 ${dto.user_Name} &nbsp;|&nbsp; 조회 ${dto.notice_Hits}</td>
+				<td align="center">작성일 ${dto.qna_Date} &nbsp;|&nbsp; 작성자 ${dto.user_Name} &nbsp;|&nbsp; 제품 ${dto.product_Name}</td>
 			</tr>
 			<tr>
-				<td valign="top">${dto.notice_Content}</td>
+				<td valign="top">${dto.qna_Content}</td>
 			</tr>
 		</table>
-
-		<table>
-			<tr class="class-btn">
-				<td><c:choose>
-						<c:when test="${sessionScope.member.userRoll=='1'}">
-							<button type="button" class="bt"
-								onclick="location.href='${pageContext.request.contextPath}/notice/update.do?notice_Num=${dto.notice_Num}&page=${page}';">수정</button>
-						</c:when>
-					</c:choose> <c:choose>
-						<c:when test="${sessionScope.member.userRoll=='1'}">
-							<button type="button" class="bt" onclick="deleteNotice();">삭제</button>
-						</c:when>
-					</c:choose></td>
+		
+		<table class="class-btn">
+			<tr>
+				<td width="50%">
+					<c:if test="${sessionScope.member.userId=='admin'}">
+					<button type="button" class="bt" onclick="location.href='${pageContext.request.contextPath}/qna/reply.do?qna_Num=${dto.qna_Num}&page=${page}';">답변</button>
+					</c:if>
+						<c:if test="${sessionScope.member.userId==dto.user_Id}">
+							<button type="button" class="bt" onclick="location.href='${pageContext.request.contextPath}/qna/update.do?qna_Num=${dto.qna_Num}&page=${page}';">수정</button>
+						</c:if>
+			    		<c:if test="${sessionScope.member.userId==dto.user_Id || sessionScope.member.userId=='admin'}">
+			    			<button type="button" class="bt" onclick="deleteQna();">삭제</button>
+			    		</c:if>
+				</td>
 				<td align="right">
-					<button type="button" class="bt"
-						onclick="location.href='${pageContext.request.contextPath}/notice/list.do?${query}';">목록</button>
+					<button type="button" class="bt" onclick="location.href='${pageContext.request.contextPath}/qna/list.do?${query}';">리스트</button>
 				</td>
 			</tr>
 		</table>
+        
 	</div>
+
+
+
+
+
+
+
 
 	<footer>
 		<jsp:include page="/WEB-INF/views/layout/footer.jsp"></jsp:include>
