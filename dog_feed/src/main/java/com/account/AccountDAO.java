@@ -155,10 +155,10 @@ public class AccountDAO {
 		
 		try {
 			sql = "SELECT accountBook_Num, user_Id, TO_CHAR(accountBook_Date, 'YYYY-MM-DD') accountBook_Date, content, amount, NVL(memo, '-') memo "
-				+ "FROM accountBook";
+				+ "FROM accountBook WHERE user_Id = ?";
 			
 			pstmt = conn.prepareStatement(sql);
-			
+			pstmt.setString(1, id);
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
