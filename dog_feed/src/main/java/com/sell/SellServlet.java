@@ -48,13 +48,16 @@ public class SellServlet extends MyServlet {
 				current_page = Integer.parseInt(page);
 			}
 			
+			String title = "전체보기";
 			String bUri = "list";
 			String keyword = "all";
 			if(uri.indexOf("feed_list.do") !=-1) {
 				keyword = "사료";
+				title = "사료";
 				bUri = "feed_list";
 			} else if(uri.indexOf("snack_list.do") !=-1) {
 				keyword = "간식";
+				title = "간식";
 				bUri = "snack_list";
 			}
 			
@@ -87,6 +90,7 @@ public class SellServlet extends MyServlet {
 			req.setAttribute("total_page", total_page);
 			req.setAttribute("paging", paging);
 			req.setAttribute("bUri", bUri);
+			req.setAttribute("title", title);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

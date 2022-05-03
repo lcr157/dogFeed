@@ -16,10 +16,10 @@
 <link href="${pageContext.request.contextPath}/resource/css/styles.css" rel="stylesheet" type="text/css"/>
 <style type="text/css">
 h3 {
-	width:20%;
-	padding: 15px 10px;
-	margin-left: 300px;
-	border-bottom: 3px solid #424951;
+	width:50%;
+	padding: 15px 0 0 0;
+	margin: auto;
+	text-align: center;
 	font-weight: bold;
 }
 
@@ -57,7 +57,9 @@ a:hover {
 
 .img-box {
 	max-width: 1000px;
-	padding: 5px;
+	padding-top: 15px;
+	padding-bottom: 5px;
+    margin: 0 auto;
 	box-sizing: border-box;
 	flex-direction: row; 
 	flex-wrap: nowrap;
@@ -90,7 +92,6 @@ a:hover {
 	color:#333;
 }
 
-
 </style>
 
 </head>
@@ -110,29 +111,25 @@ a:hover {
 		<table class="table table-form">
 			
 				<tr>
-					<td colspan="2" style="border-bottom: none; padding-bottom: 0;">
-						카테고리 : ${dto.categoryDetail_Name}
+					<td colspan="2" style="text-align:left; font-size: 18px; padding-bottom: 10px;">
+						제품 ▷ ${dto.categoryDetail_Name} ▷ ${dto.categoryDetail_Kind}
 					</td>
 				</tr>
-				<tr>	
-					<td colspan="2">
-						상세 카테고리 : ${dto.categoryDetail_Kind}
-					</td>
-				</tr>	
 				<tr>
-					<td align="right">
+					<td align="right" style="font-size: 15px;">
 						조회수 ${dto.product_Hits}
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2" width="50%" style="border-bottom: none; padding-bottom: 0; font-weight: bold; font-size: 18px;">
+					<td colspan="2" width="50%" style="border-bottom: none; padding-bottom: 10px; 
+					font-weight: bold; font-size: 20px; text-decoration: underline; text-underline-position:under;">
 						&#8361; ${dto.product_Price} 원
 					</td>
 				</tr>
 				
 				<tr style="border-bottom: none;">
-					<td colspan="2" height="110" style="font-size:18px; font-weight: bold;">
-					< ${dto.product_Info} >
+					<td colspan="2" height="200" style="font-size:20px; font-weight: bold;">
+					&lt; ${dto.product_Info} &gt;
 						<div class="img-box" style="border= none;">
 							<c:forEach var="vo" items="${listImage}">
 								<img src="${pageContext.request.contextPath}/uploads/management/${vo.image_Name}">
