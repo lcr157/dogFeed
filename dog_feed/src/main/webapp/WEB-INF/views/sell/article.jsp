@@ -20,6 +20,7 @@ h3 {
 	padding: 15px 10px;
 	margin-left: 300px;
 	border-bottom: 3px solid #424951;
+	font-weight: bold;
 }
 
 main {
@@ -47,7 +48,7 @@ a:hover {
 }
 
 .table-form {
-	text-align: left;
+	text-align: center;
 }
 
 .table-submit tr td {
@@ -58,15 +59,16 @@ a:hover {
 	max-width: 1000px;
 	padding: 5px;
 	box-sizing: border-box;
-	border: 1px solid #ccc;
-	display: flex; 
 	flex-direction: row; 
 	flex-wrap: nowrap;
 	overflow-x: auto;
+	display: table-cell;
+    vertical-align: inherit;
 }
 
 .img-box img {
-	width: 50%;
+	width: 500px;
+	height: 500px;
 	margin-right: 5px;
 	flex: 0 0 auto;
 	cursor: pointer;
@@ -116,28 +118,27 @@ a:hover {
 				</tr>
 				<tr>	
 					<td colspan="2">
-						카테고리 종류 : ${dto.categoryDetail_Kind}
+						상세 카테고리 : ${dto.categoryDetail_Kind}
 					</td>
 				</tr>	
 				<tr>
 					<td align="right">
-						조회 ${dto.product_Hits}
+						조회수 ${dto.product_Hits}
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2" width="50%" style="border-bottom: none; padding-bottom: 0;">
-						가격 : ${dto.product_Price}원
+					<td colspan="2" width="50%" style="border-bottom: none; padding-bottom: 0; font-weight: bold; font-size: 18px;">
+						&#8361; ${dto.product_Price} 원
 					</td>
 				</tr>
 				
 				<tr style="border-bottom: none;">
-					<td colspan="2" height="110">
-					${dto.product_Info}
+					<td colspan="2" height="110" style="font-size:18px; font-weight: bold;">
+					< ${dto.product_Info} >
 						<div class="img-box" style="border= none;">
 							<c:forEach var="vo" items="${listImage}">
 								<img src="${pageContext.request.contextPath}/uploads/management/${vo.image_Name}">
 							</c:forEach>
-
 						</div>
 					</td>	
 				</tr>

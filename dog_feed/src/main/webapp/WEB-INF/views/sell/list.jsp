@@ -59,7 +59,7 @@
 									<!-- Product name-->
 									<h5 class="fw-bolder">${dto.product_Name}</h5>
 									<!-- Product price-->
-									<fmt:formatNumber value="${dto.product_Price}"/>원
+									&#8361;	${dto.product_Price} 원
 								</div>	
 							</div>
 							<!-- Product actions-->
