@@ -17,7 +17,7 @@
 <link href="${pageContext.request.contextPath}/resource/css/styles.css" rel="stylesheet" type="text/css"/>
 <style type="text/css">
 .card-img-top {
-	height: 200px;
+	height: 256px;
 }
 </style>
 

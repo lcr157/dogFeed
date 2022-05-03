@@ -205,7 +205,7 @@ input[type=checkbox], input[type=radio] {
 	color: white;
 	border-radius: 3px;
 	display: block;
-	margin: 10px auto;
+	margin: 20px auto;
 }
 
 .buyAdd:active, .buyAdd:focus, .buyAdd:hover {
@@ -256,8 +256,22 @@ input[type=checkbox], input[type=radio] {
 
 .infoImg {
 	width: 500px;
-	height: 500px;
+	height: 600px;
 }
+
+.explanation {
+text-align: center;
+    font-size: 25px;
+    color: balck;
+    font-weight: 550;
+    background: #f8f9fa;
+    border-bottom: 3px solid black;
+    border-top: 1px solid lightgray;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+
 
 </style>
 <script type="text/javascript"> 
@@ -399,10 +413,12 @@ function product_order() {
 						</table>
 					</form>
 				</div>
-					
 			</div>
+				<p  class="explanation">상품설명</p>
 		</div>
-		<table class = "center" style="margin: 15px auto;">
+		
+				<table class = "center" style="margin: 15px auto; ">
+
 						<tr>
 							<td style="font-size: 18px; font-weight: 550; margin-bottom: 15px; height: 100px;">	
 								&lt; ${dto.product_Info} &gt;
@@ -418,10 +434,10 @@ function product_order() {
 					</c:forEach>
 					<tr>
 					<td class="left">
-						<button type="button" class="buyAdd" onclick="location.href='${pageContext.request.contextPath}/main/main.do'" style="margin-top: 30px;">목록</button>
+						<button type="button" class="buyAdd" onclick="location.href='${pageContext.request.contextPath}/main/main.do'" style="margin-top: 50px;">목록</button>
 					</td>
 					</tr>
-					</table>
+				</table>
 	</section>
 
 	<footer>
