@@ -134,7 +134,7 @@ a:hover {
 				
 				<tr style="border-bottom: none;">
 					<td colspan="2" height="110" style="font-size:18px; font-weight: bold;">
-					< ${dto.product_Info} >
+					${dto.product_Info}
 						<div class="img-box" style="border= none;">
 							<c:forEach var="vo" items="${listImage}">
 								<img src="${pageContext.request.contextPath}/uploads/management/${vo.image_Name}">
