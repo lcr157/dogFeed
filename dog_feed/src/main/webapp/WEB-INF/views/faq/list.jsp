@@ -77,7 +77,7 @@ ul.category li:active {
 
 #table-category {
 	text-align: center;
-	width: 650px;
+	width: 900px;
 	margin-bottom: 20px;
 }
 

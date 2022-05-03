@@ -52,10 +52,17 @@ public class AccountServlet extends MyServlet {
 		try {
 			AccountDAO dao = new AccountDAO();
 			
+			String startDate = req.getParameter("startDate");
+			String endDate = req.getParameter("endDate");
+			if(startDate==null) {
+				startDate = "";
+				endDate = "";
+			}
+			
 			HttpSession session = req.getSession();
 			SessionInfo info = (SessionInfo)session.getAttribute("member");
 			
-			List<AccountDTO> accountList = dao.listAccount(info.getUserId());
+			List<AccountDTO> accountList = dao.listAccount(info.getUserId(), startDate, endDate);
 			
 			req.setAttribute("accountList", accountList);
 			

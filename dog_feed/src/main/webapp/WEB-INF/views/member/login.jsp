@@ -65,7 +65,7 @@ li {
 }
 
 h2 {
-	color: tomato;
+	color: skyblue;
 	font-size: 2em;
 }
 
@@ -143,7 +143,7 @@ h2 {
 	border: 0;
 	outline: none;
 	border-radius: 40px;
-	background: linear-gradient(to left, rgb(255, 77, 46), rgb(255, 155, 47));
+	background-color : skyblue;
 	color: white;
 	font-size: 1.2em;
 	letter-spacing: 2px;
