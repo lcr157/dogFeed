@@ -16,7 +16,18 @@
 <!-- Core theme CSS (includes Bootstrap)-->
 <link href="${pageContext.request.contextPath}/resource/css/styles.css" rel="stylesheet" type="text/css"/>
 <!-- admin css가져오기 -->
-<link href="${pageContext.request.contextPath}/resource/css/admin.css" rel="stylesheet" type="text/css"/>
+<link href="${pageContext.request.contextPath}/resource/css/admin1.css" rel="stylesheet" type="text/css"/>
+
+<style type="text/css">
+.table-subject {
+	background: #eee;
+    text-align: center;
+}
+
+.table1 {
+	border-bottom: 2px solid #eee;
+}
+</style>
 
 <script type="text/javascript">
 function searchList() {
@@ -48,7 +59,7 @@ function searchList() {
 		</table>
 		
 		<table class="table">
-			<tr>
+			<tr class = "table-subject">
 				<th>주문날짜</th>
 				<th>주문번호</th>
 				<th>상품명</th>
@@ -59,7 +70,7 @@ function searchList() {
 				
 			<!-- 게시글 자리 -->
 			<c:forEach var="dto" items="${list}">
-				<tr>
+				<tr class="table1">
 					<td>${dto.orderDetail_Date}</td>
 					<td>${dto.order_Num}</td>
 					<td>${dto.product_Name}</td>
@@ -76,7 +87,7 @@ function searchList() {
 			
 		<table class="table">	
 			<tr>
-				<td width="100">
+				<td width="100" style="text-align: right;">
 					<button class="btn" type="button" onclick="location.href='${pageContext.request.contextPath}/admin/salesStatus.do';">새로고침</button>
 				</td>
 			</tr>

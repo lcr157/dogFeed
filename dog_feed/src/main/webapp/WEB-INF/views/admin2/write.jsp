@@ -17,7 +17,7 @@
 <!-- Core theme CSS (includes Bootstrap)-->
 <link href="${pageContext.request.contextPath}/resource/css/styles.css" rel="stylesheet" type="text/css"/>
 <!-- admin css가져오기 -->
-<link href="${pageContext.request.contextPath}/resource/css/admin.css" rel="stylesheet" type="text/css"/>
+<link href="${pageContext.request.contextPath}/resource/css/admin1.css" rel="stylesheet" type="text/css"/>
 
 <style type="text/css">
 h3 {
@@ -235,10 +235,10 @@ function deleteFile(image_Num) {
 					<td>카테고리 종류</td>
 					<td>
 						<select name="category_Num">
-							<option value="1">사료 - 소프트</option>
-							<option value="2">사료 - 하드</option>
-							<option value="3">간식 - 건식</option>
-							<option value="4">간식 - 껌</option>
+							<option value="1" ${dto.category_Num =="1" ? "selected='selected'" : ""}>사료 - 소프트</option>
+							<option value="2" ${dto.category_Num =="2" ? "selected='selected'" : ""}>사료 - 하드</option>
+							<option value="3" ${dto.category_Num =="3" ? "selected='selected'" : ""}>간식 - 건식</option>
+							<option value="4" ${dto.category_Num =="4" ? "selected='selected'" : ""}>간식 - 껌</option>
 						</select>
 					</td>
 				</tr>

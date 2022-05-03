@@ -16,7 +16,7 @@
 <!-- Core theme CSS (includes Bootstrap)-->
 <link href="${pageContext.request.contextPath}/resource/css/styles.css" rel="stylesheet" type="text/css"/>
 <!-- admin css가져오기 -->
-<link href="${pageContext.request.contextPath}/resource/css/admin.css" rel="stylesheet" type="text/css"/>
+<link href="${pageContext.request.contextPath}/resource/css/admin1.css" rel="stylesheet" type="text/css"/>
 
 <style type="text/css">
 a {
@@ -30,9 +30,15 @@ a:hover {
 	 text-decoration: underline;
 }
 
-.table {
-	border-collapse: collapse;
+.table-subject {
+	background: #eee;
+    text-align: center;
 }
+
+.table1 {
+	border-bottom: 2px solid #eee;
+}
+
 </style>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -67,7 +73,7 @@ function searchList() {
 		</table>
 		
 		<table class="table">
-			<tr>
+			<tr class="table-subject">
 				<th>상품번호</th>
 				<th>상품카테고리</th>
 				<th>상품카테고리 종류</th>
@@ -80,7 +86,7 @@ function searchList() {
 				
 			<!-- 상품 자리 -->
 			<c:forEach var="dto" items="${list}">
-				<tr>
+				<tr class="table1">
 					<td>${dto.listNum}</td>
 					<td>${dto.categoryDetail_Name}</td>
 					<td>${dto.categoryDetail_Kind}</td>

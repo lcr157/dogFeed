@@ -16,7 +16,7 @@
 <!-- Core theme CSS (includes Bootstrap)-->
 <link href="${pageContext.request.contextPath}/resource/css/styles.css" rel="stylesheet" type="text/css"/>
 <!-- admin css가져오기 -->
-<link href="${pageContext.request.contextPath}/resource/css/admin.css" rel="stylesheet" type="text/css"/>
+<link href="${pageContext.request.contextPath}/resource/css/admin1.css" rel="stylesheet" type="text/css"/>
 
 <style type="text/css">
 h3 {
@@ -68,6 +68,15 @@ a:hover {
 	cursor: pointer;
 }
 
+.table-subject {
+	background: #eee;
+    text-align: center;
+}
+
+.table1 {
+	border-bottom: 2px solid #eee;
+}
+
 </style>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -95,13 +104,13 @@ function deleteFile() {
 		<p></p>
 		
 		<table class="table table-form">
-			<tr>
+			<tr class="table-subject">
 				<td colspan="2" style="text-align: center;">
-					${dto.product_Name}
+					<h5>${dto.product_Name}</h5>
 				</td>
 			</tr>
 				
-			<tr>
+			<tr class="table1">
 				<td width="50%">
 					등록자 : 관리자
 				</td>
@@ -110,7 +119,7 @@ function deleteFile() {
 				</td>
 			</tr>
 			
-			<tr>
+			<tr class="table1">
 				<td colspan="2" width="50%" style="border-bottom: none; padding-bottom: 0;">
 					상품가격 : ${dto.product_Price}원
 				</td>
@@ -122,20 +131,20 @@ function deleteFile() {
 				</td>
 			</tr>
 			
-			<tr>	
+			<tr class="table1">	
 				<td colspan="2">
 					상품카테고리 종류 : ${dto.categoryDetail_Kind}
 				</td>
 			</tr>
 			
-			<tr>
+			<tr class="table1">
 				<td colspan="2" valign="top" height="200">
 					상품설명 <br>
 					${dto.product_Info}
 				</td>
 			</tr>	
 			
-			<tr style="border-bottom: none;">
+			<tr class="table1" class="table1" style="border-bottom: none;">
 				<td colspan="2" height="110">
 					첨부된 사진 <p></p>
 					<div class="img-box" style="border= none;">
@@ -146,9 +155,9 @@ function deleteFile() {
 				</td>	
 			</tr>
 			
-			<tr>
+			<tr class="table1">
 				<td colspan="2">
-					이전글
+					이전글 - 
 					<c:if test="${not empty preReadDto }">
 						<a href="${pageContext.request.contextPath}/admin/article.do?${query}&num=${preReadDto.product_Num}">${preReadDto.product_Name}</a>
 					</c:if>
@@ -157,7 +166,7 @@ function deleteFile() {
 			
 			<tr>
 				<td colspan="2">
-					다음글
+					다음글 - 
 					<c:if test="${not empty nextReadDto}">
 						
 						<a href="${pageContext.request.contextPath}/admin/article.do?${query}&num=${nextReadDto.product_Num}">${nextReadDto.product_Name}</a>
