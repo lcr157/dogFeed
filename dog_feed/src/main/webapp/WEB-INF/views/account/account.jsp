@@ -201,14 +201,14 @@ function diffDays(startDate, endDate) {
 
 function deleteAccount(num) {
     if(confirm("가계부를 삭제하시겠습니까?")) {
-       let url = "${pageContext.request.contextPath}/account/delete.do?page=${page}&accountBook_Num=" + num; 
+       let url = "${pageContext.request.contextPath}/account/delete.do?accountBook_Num=" + num; 
        location.href = url;
     }
 }
  
 function updateAccount(num) {
     if(confirm("가계부를 수정하시겠습니까?")) {
-       let url = "${pageContext.request.contextPath}/account/update.do?page=${page}&accountBook_Num=" + num; 
+       let url = "${pageContext.request.contextPath}/account/update.do?accountBook_Num=" + num; 
        location.href = url;
     }
 }

@@ -89,7 +89,7 @@ public class AccountServlet extends MyServlet {
 		
 		String cp = req.getContentType();
 		if(req.getMethod().equalsIgnoreCase("GET")) {
-			resp.sendRedirect(cp + "/");
+			resp.sendRedirect(cp+"/account/account.do");
 			return;
 		}
 		
@@ -120,27 +120,23 @@ public class AccountServlet extends MyServlet {
 		
 		String cp = req.getContextPath();
 		
-		String page = req.getParameter("page");
-		
 		try {
 			int accountBook_Num = Integer.parseInt(req.getParameter("accountBook_Num"));
 			AccountDTO dto = dao.readAccount(accountBook_Num);
 			
 			if(dto == null) {
-				resp.sendRedirect(cp+"/account/account.do?page=" + page);
+				resp.sendRedirect(cp+"/account/account.do");
 				return;
 			}
 			
 			// 게시물을 올린 사용자가 아니면
 			if (! dto.getUser_Id().equals(info.getUserId())) {
-				resp.sendRedirect(cp + "/account/account.do?page=" + page);
+				resp.sendRedirect(cp + "/account/account.do");
 				return;
 			}
 			
 			req.setAttribute("dto", dto);
-			req.setAttribute("page", page);
 			req.setAttribute("mode", "update");
-			
 			forward(req, resp, "/WEB-INF/views/account/write.jsp");
 			return;
 			
@@ -148,7 +144,7 @@ public class AccountServlet extends MyServlet {
 			e.printStackTrace();
 		}
 		
-		resp.sendRedirect(cp + "/account/account.do?page=" + page);
+		resp.sendRedirect(cp + "/account/account.do");
 		
 	}
 	
@@ -164,9 +160,7 @@ public class AccountServlet extends MyServlet {
 			resp.sendRedirect(cp + "/account/account.do");
 			return;
 		}
-		
-		String page = req.getParameter("page");
-		
+	
 		try {
 			AccountDTO dto = new AccountDTO();
 			dto.setAccountBook_Num(Integer.parseInt(req.getParameter("accountBook_Num")));
@@ -183,7 +177,7 @@ public class AccountServlet extends MyServlet {
 			e.printStackTrace();
 		}
 		
-		resp.sendRedirect(cp + "/account/account.do?page=" + page);
+		resp.sendRedirect(cp + "/account/account.do");
 	}
 	
 	protected void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -194,9 +188,7 @@ public class AccountServlet extends MyServlet {
 		SessionInfo info = (SessionInfo) session.getAttribute("member");
 		
 		String cp = req.getContextPath();
-		
-		String page = req.getParameter("page");
-		String query = "page=" + page;
+
 		
 		try {
 			int accountBook_Num = Integer.parseInt(req.getParameter("accountBook_Num"));
@@ -204,13 +196,13 @@ public class AccountServlet extends MyServlet {
 			AccountDTO dto = dao.readAccount(accountBook_Num);
 			
 			if(dto == null) {
-				resp.sendRedirect(cp + "/account/account.do?"+ query);
+				resp.sendRedirect(cp + "/account/account.do");
 				return;
 			}
 			
 			// 게시물을 올린 사용자나 admin이 아니면
 			if(! dto.getUser_Id().equals(info.getUserId()) && ! info.getUserId().equals("admin")) {
-				resp.sendRedirect(cp + "/account/list.do?" + query);
+				resp.sendRedirect(cp + "/account/account.do");
 				return;
 			}
 			
@@ -220,7 +212,7 @@ public class AccountServlet extends MyServlet {
 			e.printStackTrace();
 		}
 		
-		resp.sendRedirect(cp + "/account/account.do?" + query);
+		resp.sendRedirect(cp + "/account/account.do");
 		
 	}
 	

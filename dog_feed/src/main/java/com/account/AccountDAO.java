@@ -50,7 +50,7 @@ public class AccountDAO {
 		String sql;
 		
 		try {
-			sql = "UPDATE accountBook SET accountBook_Date=? content=? amount=? memo=? WHERE accountBook_Num=?";
+			sql = "UPDATE accountBook SET accountBook_Date=?, content=?, amount=?, memo=? WHERE accountBook_Num=?";
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setString(1, dto.getAccountBook_Date());
