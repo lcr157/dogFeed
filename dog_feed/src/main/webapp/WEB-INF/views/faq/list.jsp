@@ -119,6 +119,12 @@ ul.category li:active {
 	background: #fafafa;
 }
 
+.tg2 .content {
+	min-height: 200px;
+	white-space:pre-wrap;
+	
+}
+
 
 .tg2 .content {
 	min-height: 200px;
