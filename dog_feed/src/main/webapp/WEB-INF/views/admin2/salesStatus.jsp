@@ -74,8 +74,8 @@ function searchList() {
 					<td>${dto.orderDetail_Date}</td>
 					<td>${dto.order_Num}</td>
 					<td>${dto.product_Name}</td>
-					<td>${dto.orderDetail_Quant}개</td>
 					<td>${dto.orderDetail_Price}원</td>
+					<td>${dto.orderDetail_Quant}개</td>
 					<td>${dto.orderDetail_Price * dto.orderDetail_Quant}원</td>
 				</tr>
 			</c:forEach>
